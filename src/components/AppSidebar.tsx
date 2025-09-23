@@ -11,6 +11,9 @@ import {
   User,
   QrCode,
   Award,
+  FileSpreadsheet,
+  Presentation,
+  Code,
 } from "lucide-react";
 
 import {
@@ -45,6 +48,13 @@ const navigationItems = [
   { title: "Notes", url: "/notes", icon: FileText },
   { title: "QR Scanner", url: "/scanner", icon: QrCode },
   { title: "Grades", url: "/grades", icon: Award },
+];
+
+const editorItems = [
+  { title: "Document Editor", url: "/editor/document", icon: FileText },
+  { title: "Spreadsheet", url: "/editor/spreadsheet", icon: FileSpreadsheet },
+  { title: "Presentation", url: "/editor/presentation", icon: Presentation },
+  { title: "Code Editor", url: "/editor/code", icon: Code },
 ];
 
 const userItems = [
@@ -84,6 +94,33 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {navigationItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link
+                      to={item.url}
+                      className={`flex items-center space-x-3 ${
+                        isActive(item.url)
+                          ? "bg-primary text-primary-foreground"
+                          : "hover:bg-accent hover:text-accent-foreground"
+                      }`}
+                    >
+                      <item.icon className="h-5 w-5" />
+                      {!collapsed && <span>{item.title}</span>}
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
+            Editors
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {editorItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link
