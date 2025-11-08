@@ -114,7 +114,7 @@ export function AppSidebar() {
           </div>
           {!collapsed && (
             <div>
-              <h2 className="text-lg font-semibold text-foreground">EduClass</h2>
+              <h2 className="text-lg font-semibold text-foreground">TrackMate</h2>
               <p className="text-sm text-muted-foreground">Smart Classroom</p>
             </div>
           )}

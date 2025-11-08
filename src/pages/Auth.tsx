@@ -28,7 +28,7 @@ export function AuthPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-foreground/20 rounded-full mb-4">
             <BookOpen className="h-8 w-8 text-primary-foreground" />
           </div>
-          <h1 className="text-3xl font-bold text-primary-foreground">EduClass</h1>
+          <h1 className="text-3xl font-bold text-primary-foreground">TrackMate</h1>
           <p className="text-primary-foreground/80 mt-2">Smart Classroom Management System</p>
         </div>
 
