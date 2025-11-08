@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
+import { useRole } from "@/contexts/RoleContext";
 import {
   LayoutDashboard,
   Calendar,
@@ -14,6 +15,9 @@ import {
   FileSpreadsheet,
   Presentation,
   Code,
+  Building2,
+  ClipboardCheck,
+  GraduationCap,
 } from "lucide-react";
 
 import {
@@ -41,14 +45,42 @@ const user = {
   avatar: "",
 };
 
-const navigationItems = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Attendance", url: "/attendance", icon: Calendar },
-  { title: "Assignments", url: "/assignments", icon: BookOpen },
-  { title: "Notes", url: "/notes", icon: FileText },
-  { title: "QR Scanner", url: "/scanner", icon: QrCode },
-  { title: "Grades", url: "/grades", icon: Award },
-];
+// Role-based navigation items
+const getNavigationItems = (role: string) => {
+  const baseItems = {
+    student: [
+      { title: "Dashboard", url: "/", icon: LayoutDashboard },
+      { title: "Attendance", url: "/attendance", icon: Calendar },
+      { title: "Assignments", url: "/assignments", icon: BookOpen },
+      { title: "Notes", url: "/notes", icon: FileText },
+      { title: "QR Scanner", url: "/scanner", icon: QrCode },
+      { title: "Grades", url: "/grades", icon: Award },
+    ],
+    faculty: [
+      { title: "Dashboard", url: "/faculty", icon: LayoutDashboard },
+      { title: "My Classes", url: "/faculty", icon: BookOpen },
+      { title: "Attendance", url: "/attendance", icon: Calendar },
+      { title: "Assignments", url: "/faculty", icon: ClipboardCheck },
+      { title: "Materials", url: "/materials", icon: FileText },
+    ],
+    hod: [
+      { title: "Dashboard", url: "/hod", icon: LayoutDashboard },
+      { title: "Faculty", url: "/hod", icon: Users },
+      { title: "Students", url: "/hod", icon: GraduationCap },
+      { title: "Reports", url: "/reports", icon: FileText },
+      { title: "Announcements", url: "/announcements", icon: Award },
+    ],
+    admin: [
+      { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
+      { title: "Departments", url: "/admin", icon: Building2 },
+      { title: "Faculty", url: "/admin", icon: Users },
+      { title: "Students", url: "/admin", icon: GraduationCap },
+      { title: "Analytics", url: "/analytics", icon: Award },
+    ],
+  };
+
+  return baseItems[role as keyof typeof baseItems] || baseItems.student;
+};
 
 const editorItems = [
   { title: "Document Editor", url: "/editor/document", icon: FileText },
@@ -65,8 +97,11 @@ const userItems = [
 export function AppSidebar() {
   const { state } = useSidebar();
   const location = useLocation();
+  const { role } = useRole();
   const currentPath = location.pathname;
   const collapsed = state === "collapsed";
+
+  const navigationItems = getNavigationItems(role);
 
   const isActive = (path: string) => currentPath === path;
 
