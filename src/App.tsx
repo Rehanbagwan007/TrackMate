@@ -18,31 +18,32 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <RoleProvider>
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<AuthPage />} />
-            <Route path="/attendance" element={<AttendancePage />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/hod" element={<HODDashboard />} />
-            <Route path="/faculty" element={<FacultyDashboard />} />
-            <Route path="/editor/document" element={<DocumentEditor />} />
-            <Route path="/editor/spreadsheet" element={<SpreadsheetEditor />} />
-            <Route path="/editor/presentation" element={<PresentationEditor />} />
-            <Route path="/editor/code" element={<CodeEditor />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <RoleProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/attendance" element={<AttendancePage />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/hod" element={<HODDashboard />} />
+              <Route path="/faculty" element={<FacultyDashboard />} />
+              <Route path="/editor/document" element={<DocumentEditor />} />
+              <Route path="/editor/spreadsheet" element={<SpreadsheetEditor />} />
+              <Route path="/editor/presentation" element={<PresentationEditor />} />
+              <Route path="/editor/code" element={<CodeEditor />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </RoleProvider>
       </TooltipProvider>
-    </RoleProvider>
-  </QueryClientProvider>
-);
+    </QueryClientProvider>
+  );
+};
 
 export default App;
