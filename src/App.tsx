@@ -14,6 +14,7 @@ import { CodeEditor } from "./pages/CodeEditor";
 import AdminDashboard from "./pages/AdminDashboard";
 import HODDashboard from "./pages/HODDashboard";
 import FacultyDashboard from "./pages/FacultyDashboard";
+import StudentDashboard from "./pages/StudentDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => {
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/hod" element={<HODDashboard />} />
               <Route path="/faculty" element={<FacultyDashboard />} />
+              <Route path="/student" element={<StudentDashboard />} />
               <Route path="/editor/document" element={<DocumentEditor />} />
               <Route path="/editor/spreadsheet" element={<SpreadsheetEditor />} />
               <Route path="/editor/presentation" element={<PresentationEditor />} />
