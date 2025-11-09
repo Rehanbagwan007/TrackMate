@@ -1,8 +1,8 @@
-import { useRole } from "./contexts/RoleContext";
-import AdminDashboard from "./pages/AdminDashboard";
-import HODDashboard from "./pages/HODDashboard";
-import FacultyDashboard from "./pages/FacultyDashboard";
-import StudentDashboard from "./pages/StudentDashboard";
+import { useRole } from "@/contexts/RoleContext";
+import AdminDashboard from "./AdminDashboard";
+import HODDashboard from "./HODDashboard";
+import FacultyDashboard from "./FacultyDashboard";
+import StudentDashboard from "./StudentDashboard";
 
 const Index = () => {
     const { role } = useRole();
