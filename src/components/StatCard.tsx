@@ -19,18 +19,18 @@ const variantStyles = {
 
 export function StatCard({ title, value, subtitle, icon, variant = "default", className }: StatCardProps) {
   return (
-    <Card className={cn("shadow-card hover:shadow-elevated transition-smooth", className)}>
+    <Card className={cn("shadow-card hover:shadow-elevated transition-all duration-300", className)}>
       <CardContent className="p-6">
         <div className="flex items-center justify-between space-x-4">
-          <div className="space-y-1">
-            <p className="text-sm text-muted-foreground font-medium">{title}</p>
+          <div className="space-y-1.5">
+            <p className="text-sm text-muted-foreground font-medium tracking-wide">{title}</p>
             <div className="flex items-baseline space-x-2">
-              <p className="text-3xl font-bold text-foreground">{value}</p>
+              <p className="text-3xl font-bold text-foreground tracking-tight">{value}</p>
               <p className="text-sm text-muted-foreground">{subtitle}</p>
             </div>
           </div>
           <div className={cn(
-            "p-3 rounded-full",
+            "p-3.5 rounded-2xl",
             variantStyles[variant]
           )}>
             {icon}

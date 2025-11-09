@@ -56,6 +56,7 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+          secondary: "hsl(var(--card-secondary))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -71,10 +72,12 @@ export default {
       backgroundImage: {
         'gradient-primary': 'var(--gradient-primary)',
         'gradient-hero': 'var(--gradient-hero)',
+        'gradient-card': 'var(--gradient-card)',
       },
       boxShadow: {
         'card': 'var(--shadow-card)',
         'elevated': 'var(--shadow-elevated)',
+        'soft': 'var(--shadow-soft)',
       },
       transitionTimingFunction: {
         'smooth': 'var(--transition-smooth)',
