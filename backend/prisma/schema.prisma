@@ -1,0 +1,85 @@
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model InstituteAdmin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HOD {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  facialData String? // Placeholder for facial data
+  biometricData String? // Placeholder for biometric data
+}
+
+model Faculty {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  facialData String? // Placeholder for facial data
+  biometricData String? // Placeholder for biometric data
+  students  Student[]
+}
+
+model Student {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id])
+  facultyId String
+  faculty   Faculty @relation(fields: [facultyId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  facialData String? // Placeholder for facial data
+  biometricData String? // Placeholder for biometric data
+}
+
+model Department {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  hod       HOD[]
+  faculty   Faculty[]
+  students  Student[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EnrollmentRequest {
+  id        String   @id @default(cuid())
+  email     String
+  name      String
+  departmentId String
+  role      String   // HOD, Faculty, or Student
+  status    String   @default("pending") // pending, approved, or rejected
+  approverId String? // ID of the HOD or Faculty who approves the request
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
