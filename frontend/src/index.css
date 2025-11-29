@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smart Classroom Design System - Google-inspired clean interface */
+
+@layer base {
+  :root {
+    /* Soft cream/beige background palette inspired by reference */
+    --background: 40 30% 96%;
+    --foreground: 30 10% 15%;
+    
+    /* Card system - soft white with subtle warmth */
+    --card: 40 40% 98%;
+    --card-foreground: 30 10% 15%;
+    --card-secondary: 45 35% 94%;
+    
+    /* Popover */
+    --popover: 40 40% 98%;
+    --popover-foreground: 30 10% 15%;
+    
+    /* Primary - Warm golden yellow */
+    --primary: 45 100% 51%;
+    --primary-foreground: 30 10% 15%;
+    --primary-light: 45 100% 70%;
+    --primary-dark: 40 95% 45%;
+    
+    /* Secondary - Dark charcoal for contrast */
+    --secondary: 30 8% 20%;
+    --secondary-foreground: 40 40% 98%;
+    
+    /* Muted - Soft neutrals */
+    --muted: 40 20% 90%;
+    --muted-foreground: 30 8% 45%;
+    
+    /* Accent - Subtle warm tones */
+    --accent: 40 30% 92%;
+    --accent-foreground: 30 10% 15%;
+    
+    /* Status colors */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 40 40% 98%;
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 98%;
+    
+    /* Borders - Very subtle */
+    --border: 40 20% 88%;
+    --input: 40 20% 88%;
+    --ring: 45 100% 51%;
+    
+    /* Sidebar */
+    --sidebar-background: 40 35% 97%;
+    --sidebar-foreground: 30 10% 20%;
+    --sidebar-primary: 30 8% 20%;
+    --sidebar-primary-foreground: 40 40% 98%;
+    --sidebar-accent: 40 30% 92%;
+    --sidebar-accent-foreground: 30 10% 15%;
+    --sidebar-border: 40 20% 90%;
+    --sidebar-ring: 45 100% 51%;
+    
+    --radius: 1rem;
+    
+    /* Elegant gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(45, 100%, 51%) 0%, hsl(40, 95%, 60%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(40, 30%, 96%) 0%, hsl(45, 35%, 90%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(40, 40%, 99%) 0%, hsl(40, 35%, 96%) 100%);
+    
+    /* Soft shadows */
+    --shadow-card: 0 4px 24px -8px rgba(0, 0, 0, 0.08), 0 2px 8px -4px rgba(0, 0, 0, 0.04);
+    --shadow-elevated: 0 12px 40px -12px rgba(0, 0, 0, 0.12), 0 4px 16px -8px rgba(0, 0, 0, 0.06);
+    --shadow-soft: 0 2px 12px -4px rgba(0, 0, 0, 0.05);
+    
+    --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 30 8% 12%;
+    --foreground: 40 30% 95%;
+    
+    --card: 30 8% 16%;
+    --card-foreground: 40 30% 95%;
+    --card-secondary: 30 8% 20%;
+    
+    --popover: 30 8% 16%;
+    --popover-foreground: 40 30% 95%;
+    
+    --primary: 45 100% 51%;
+    --primary-foreground: 30 10% 15%;
+    --primary-light: 45 100% 65%;
+    --primary-dark: 40 95% 40%;
+    
+    --secondary: 30 8% 85%;
+    --secondary-foreground: 30 8% 15%;
+    
+    --muted: 30 8% 22%;
+    --muted-foreground: 30 8% 65%;
+    
+    --accent: 30 8% 24%;
+    --accent-foreground: 40 30% 95%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 40 30% 95%;
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 98%;
+    
+    --border: 30 8% 24%;
+    --input: 30 8% 24%;
+    --ring: 45 100% 51%;
+    
+    --sidebar-background: 30 8% 14%;
+    --sidebar-foreground: 40 30% 90%;
+    --sidebar-primary: 40 30% 85%;
+    --sidebar-primary-foreground: 30 8% 15%;
+    --sidebar-accent: 30 8% 22%;
+    --sidebar-accent-foreground: 40 30% 90%;
+    --sidebar-border: 30 8% 20%;
+    --sidebar-ring: 45 100% 51%;
+    
+    --gradient-primary: linear-gradient(135deg, hsl(45, 100%, 51%) 0%, hsl(40, 95%, 55%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(30, 8%, 14%) 0%, hsl(30, 8%, 18%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(30, 8%, 18%) 0%, hsl(30, 8%, 16%) 100%);
+    
+    --shadow-card: 0 4px 24px -8px rgba(0, 0, 0, 0.4), 0 2px 8px -4px rgba(0, 0, 0, 0.2);
+    --shadow-elevated: 0 12px 40px -12px rgba(0, 0, 0, 0.5), 0 4px 16px -8px rgba(0, 0, 0, 0.3);
+    --shadow-soft: 0 2px 12px -4px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
