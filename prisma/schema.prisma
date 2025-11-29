@@ -1,0 +1,96 @@
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// User model for all roles
+model User {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  email           String   @unique
+  name            String
+  password        String
+  phone           String?
+  role            String   // "INSTITUTE_ADMIN", "HOD", "FACULTY", or "STUDENT"
+  idProofUrl      String?  // URL to the uploaded ID proof
+  faceEmbedding   String?  // Placeholder for face scan data
+  biometricData   String?  // Placeholder for biometric data
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  hod             HOD?
+  faculty         Faculty?
+  student         Student?
+  approvedRequests EnrollmentRequest[]
+}
+
+model Department {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  hods      HOD[]
+  faculty   Faculty[]
+  students  Student[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enrollmentRequests EnrollmentRequest[]
+}
+
+model HOD {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String     @unique @db.ObjectId
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String     @db.ObjectId
+}
+
+model Faculty {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  user          User        @relation(fields: [userId], references: [id])
+  userId        String      @unique @db.ObjectId
+  department    Department  @relation(fields: [departmentId], references: [id])
+  departmentId  String      @db.ObjectId
+  qualifications String?
+}
+
+model Student {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String     @unique @db.ObjectId
+  rollNumber   String     @unique
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String     @db.ObjectId
+  year         Int
+  division     String
+}
+
+model EnrollmentRequest {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  email           String
+  name            String
+  phone           String?
+  department      Department? @relation(fields: [departmentId], references: [id])
+  departmentId    String?   @db.ObjectId
+  roleRequested   String    // "HOD", "FACULTY", or "STUDENT"
+  status          String    @default("pending") // "pending", "approved", "rejected"
+  approver        User?     @relation(fields: [approverId], references: [id])
+  approverId      String?   @db.ObjectId
+  idProofUrl      String?
+  faceEmbedding   String?
+  biometricData   String?
+  qualifications  String?   // For Faculty
+  rollNumber      String?   // For Student
+  year            Int?      // For Student
+  division        String?   // For Student
+  password        String    // Store a securely hashed password
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
