@@ -13,9 +13,7 @@ interface AuthRequest extends Request {
   };
 }
 
-// @desc    Get all enrollment requests
-// @route   GET /api/enrollments
-// @access  Private (HOD or Faculty)
+
 export const getEnrollmentRequests = async (req: AuthRequest, res: Response) => {
   try {
     const enrollments = await prisma.enrollment.findMany({
