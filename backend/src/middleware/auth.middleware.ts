@@ -1,20 +1,16 @@
-
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { PrismaClient,User } from '@prisma/client';
-import { UserArgs } from '@prisma/client/runtime/library';
-
+import { PrismaClient, User } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 // Extend Express Request interface to include user property
 interface AuthRequest extends Request {
   user?: {
-    id: string;
+    id: number;
     name: string;
     email: string;
     role: string;
-    // Add other fields if needed
   };
 }
 
@@ -27,10 +23,10 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
       token = req.headers.authorization.split(' ')[1];
 
       // Verify token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret') as { id: string };
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret') as { id: number };
 
       const user = await prisma?.user?.findUnique({
-        where: { id: decoded.id as unknown as string },
+        where: { id: decoded.id },
         select: { id: true, name: true, email: true, role: true },
       });
 
@@ -38,9 +34,7 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
         return res.status(401).json({ message: 'Not authorized, user not found' });
       }
 
-      req.user = user ;
-
-      next();
+      req.user = user;
       next();
     } catch (error) {
       console.error(error);
@@ -53,9 +47,9 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
   }
 };
 
-export const authorize = (...roles: User[]) => {
+export const authorize = (...roles: string[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
-    if (!req.user || !roles.includes(req.user.role as unknown as User)) {
+    if (!req.user || !roles.includes(req.user.role)) {
       return res.status(403).json({ message: `User role ${req.user?.role} is not authorized to access this route` });
     }
     next();

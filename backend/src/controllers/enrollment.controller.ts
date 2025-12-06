@@ -64,17 +64,17 @@ export const updateEnrollmentRequest = async (req: AuthRequest, res: Response) =
   const approverId = req.user?.id;
 
   try {
-    const request = await prisma.enrollmentRequest.findUnique({ where: { id } });
+    const request = await prisma.enrollmentRequest.findUnique({ where: { id: Number(id) } });
 
     if (!request) {
       return res.status(404).json({ message: 'Enrollment request not found' });
     }
 
     const updatedRequest = await prisma.enrollmentRequest.update({
-      where: { id },
+      where: { id: Number(id) },
       data: { 
         status, 
-        approver: approverId ? { connect: { id: approverId } } : undefined
+        approver: approverId ? { connect: { id: Number(approverId) } } : undefined
       },
     });
 

@@ -25,7 +25,7 @@ export const getUsers = async (req: Request, res: Response) => {
 export const getUserById = async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.findUnique({
-      where: { id: req.params.id as unknown as  string },
+      where: { id: req.params.id as unknown as number },
       select: { id: true, name: true, email: true, role: true },
     });
 

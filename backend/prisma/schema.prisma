@@ -10,21 +10,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// User model for all roles
 model User {
-  id              String   @id @default(cuid())
-  email           String   @unique
+  id              Int     @id @default(autoincrement())
+  email           String  @unique
   name            String
   password        String
   phone           String?
-  role            String   // "INSTITUTE_ADMIN", "HOD", "FACULTY", or "STUDENT"
-  idProofUrl      String?  // URL to the uploaded ID proof
-  faceEmbedding   String?  // Placeholder for face scan data
-  biometricData   String?  // Placeholder for biometric data
+  role            String
+  idProofUrl      String?
+  faceEmbedding   String?
+  biometricData   String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  // Relations
   hod             HOD?
   faculty         Faculty?
   student         Student?
@@ -43,26 +41,26 @@ model Department {
 }
 
 model HOD {
-  id           String     @id @default(cuid())
+  id           Int     @id @default(autoincrement())
   user         User       @relation(fields: [userId], references: [id])
-  userId       String     @unique
+  userId       Int     @unique
   department   Department @relation(fields: [departmentId], references: [id])
   departmentId Int
 }
 
 model Faculty {
-  id            String      @id @default(cuid())
+  id            Int      @id @default(autoincrement())
   user          User        @relation(fields: [userId], references: [id])
-  userId        String      @unique
+  userId        Int     @unique
   department    Department  @relation(fields: [departmentId], references: [id])
   departmentId  Int
   qualifications String?
 }
 
 model Student {
-  id           String     @id @default(cuid())
+  id           Int     @id @default(autoincrement())
   user         User       @relation(fields: [userId], references: [id])
-  userId       String     @unique
+  userId       Int     @unique
   rollNumber   String     @unique
   department   Department @relation(fields: [departmentId], references: [id])
   departmentId Int
@@ -71,24 +69,24 @@ model Student {
 }
 
 model EnrollmentRequest {
-  id              String    @id @default(cuid())
+  id              Int    @id @default(autoincrement())
   email           String
   name            String
   phone           String?
   department      Department? @relation(fields: [departmentId], references: [id])
   departmentId    Int?
-  roleRequested   String    // "HOD", "FACULTY", or "STUDENT"
-  status          String    @default("pending") // "pending", "approved", "rejected"
+  roleRequested   String
+  status          String    @default("pending")
   approver        User?     @relation("ApprovedEnrollments", fields: [approverId], references: [id])
-  approverId      String?
+  approverId      Int?
   idProofUrl      String?
   faceEmbedding   String?
   biometricData   String?
-  qualifications  String?   // For Faculty
-  rollNumber      String?   // For Student
-  year            Int?      // For Student
-  division        String?   // For Student
-  password        String    // Store a securely hashed password
+  qualifications  String?
+  rollNumber      String?
+  year            Int?
+  division        String?
+  password        String
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 }
