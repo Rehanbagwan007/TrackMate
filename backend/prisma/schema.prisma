@@ -2,84 +2,94 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
+// User model for all roles
+model User {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  name            String
+  password        String
+  phone           String?
+  role            String   // "INSTITUTE_ADMIN", "HOD", "FACULTY", or "STUDENT"
+  idProofUrl      String?  // URL to the uploaded ID proof
+  faceEmbedding   String?  // Placeholder for face scan data
+  biometricData   String?  // Placeholder for biometric data
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-model InstituteAdmin {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model HOD {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  name      String
-  departmentId String
-  department   Department @relation(fields: [departmentId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  facialData String? // Placeholder for facial data
-  biometricData String? // Placeholder for biometric data
-}
-
-model Faculty {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  name      String
-  departmentId String
-  department   Department @relation(fields: [departmentId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  facialData String? // Placeholder for facial data
-  biometricData String? // Placeholder for biometric data
-  students  Student[]
-}
-
-model Student {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  name      String
-  departmentId String
-  department   Department @relation(fields: [departmentId], references: [id])
-  facultyId String
-  faculty   Faculty @relation(fields: [facultyId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  facialData String? // Placeholder for facial data
-  biometricData String? // Placeholder for biometric data
+  // Relations
+  hod             HOD?
+  faculty         Faculty?
+  student         Student?
+  approvedRequests EnrollmentRequest[] @relation("ApprovedEnrollments")
 }
 
 model Department {
   id        String   @id @default(cuid())
   name      String   @unique
-  hod       HOD[]
+  hods      HOD[]
   faculty   Faculty[]
   students  Student[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  enrollmentRequests EnrollmentRequest[]
+}
+
+model HOD {
+  id           String     @id @default(cuid())
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String     @unique
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+}
+
+model Faculty {
+  id            String      @id @default(cuid())
+  user          User        @relation(fields: [userId], references: [id])
+  userId        String      @unique
+  department    Department  @relation(fields: [departmentId], references: [id])
+  departmentId  String
+  qualifications String?
+}
+
+model Student {
+  id           String     @id @default(cuid())
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String     @unique
+  rollNumber   String     @unique
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+  year         Int
+  division     String
 }
 
 model EnrollmentRequest {
-  id        String   @id @default(cuid())
-  email     String
-  name      String
-  departmentId String
-  role      String   // HOD, Faculty, or Student
-  status    String   @default("pending") // pending, approved, or rejected
-  approverId String? // ID of the HOD or Faculty who approves the request
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String    @id @default(cuid())
+  email           String
+  name            String
+  phone           String?
+  department      Department? @relation(fields: [departmentId], references: [id])
+  departmentId    String?
+  roleRequested   String    // "HOD", "FACULTY", or "STUDENT"
+  status          String    @default("pending") // "pending", "approved", "rejected"
+  approver        User?     @relation("ApprovedEnrollments", fields: [approverId], references: [id])
+  approverId      String?
+  idProofUrl      String?
+  faceEmbedding   String?
+  biometricData   String?
+  qualifications  String?   // For Faculty
+  rollNumber      String?   // For Student
+  year            Int?      // For Student
+  division        String?   // For Student
+  password        String    // Store a securely hashed password
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
-
