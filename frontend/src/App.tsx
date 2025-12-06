@@ -16,6 +16,7 @@ import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MainLayout from "./components/MainLayout";
 import DashboardRedirect from "./components/DashboardRedirect";
+import { SidebarProvider } from "./context/sidebar";
 
 const queryClient = new QueryClient();
 
@@ -29,7 +30,13 @@ const App = () => {
           <Routes>
             <Route path="/auth" element={<AuthPage />} />
             <Route element={<ProtectedRoute />}>
-              <Route element={<MainLayout />}>
+              <Route
+                element={
+                  <SidebarProvider>
+                    <MainLayout />
+                  </SidebarProvider>
+                }
+              >
                 <Route path="/" element={<DashboardRedirect />} />
                 <Route path="/attendance" element={<AttendancePage />} />
                 <Route path="/admin" element={<AdminDashboard />} />
