@@ -1,7 +1,10 @@
-node_modules
-dist
-.env
 
-/src/generated/prisma
+# Compiled JavaScript files
+*.js
+*.js.map
 
-/src/generated/prisma
+# Node modules
+node_modules/
+
+# Prisma client
+/prisma/client
