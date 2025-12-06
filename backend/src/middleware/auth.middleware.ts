@@ -1,7 +1,9 @@
 
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { PrismaClient, UserRole } from '@prisma/client';
+import { PrismaClient,User } from '@prisma/client';
+import { UserArgs } from '@prisma/client/runtime/library';
+
 
 const prisma = new PrismaClient();
 
@@ -11,7 +13,8 @@ interface AuthRequest extends Request {
     id: string;
     name: string;
     email: string;
-    role: UserRole;
+    role: string;
+    // Add other fields if needed
   };
 }
 
@@ -26,12 +29,18 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret') as { id: string };
 
-      // Get user from the token
-      req.user = await prisma.user.findUnique({
-        where: { id: decoded.id },
+      const user = await prisma?.user?.findUnique({
+        where: { id: decoded.id as unknown as string },
         select: { id: true, name: true, email: true, role: true },
       });
 
+      if (!user) {
+        return res.status(401).json({ message: 'Not authorized, user not found' });
+      }
+
+      req.user = user ;
+
+      next();
       next();
     } catch (error) {
       console.error(error);
@@ -44,9 +53,9 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
   }
 };
 
-export const authorize = (...roles: UserRole[]) => {
+export const authorize = (...roles: User[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
-    if (!req.user || !roles.includes(req.user.role)) {
+    if (!req.user || !roles.includes(req.user.role as unknown as User)) {
       return res.status(403).json({ message: `User role ${req.user?.role} is not authorized to access this route` });
     }
     next();

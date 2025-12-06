@@ -18,13 +18,14 @@ export const getUsers = async (req: Request, res: Response) => {
   }
 };
 
+
 // @desc    Get user by ID
 // @route   GET /api/users/:id
 // @access  Private
 export const getUserById = async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id as unknown as  string },
       select: { id: true, name: true, email: true, role: true },
     });
 

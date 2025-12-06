@@ -13,6 +13,6 @@ router.route('/').get(getDepartments);
 // @route   POST api/departments
 // @desc    Create a department
 // @access  Private (Institute Admin)
-router.route('/').post(protect, authorize('INSTITUTE_ADMIN'), createDepartment);
+router.route('/').post(protect, authorize('INSTITUTE_ADMIN' as any), createDepartment);
 
 export default router;

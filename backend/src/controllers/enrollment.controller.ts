@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -51,6 +51,7 @@ export const getEnrollmentRequests = async (req: AuthRequest, res: Response) => 
       where: { status: 'pending' },
       include: { department: true },
     });
+    console.log(requests)
     res.json(requests);
   } catch (error) {
     res.status(500).json({ message: 'Something went wrong' });

@@ -8,7 +8,7 @@ const router = Router();
 // @route   GET api/users
 // @desc    Get all users
 // @access  Private (Admin)
-router.route('/').get(protect, authorize('INSTITUTE_ADMIN'), getUsers);
+router.route('/').get(protect, authorize('INSTITUTE_ADMIN' as any), getUsers);
 
 // @route   GET api/users/:id
 // @desc    Get user by ID

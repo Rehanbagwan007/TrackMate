@@ -10,8 +10,10 @@ const prisma = new PrismaClient();
 export const getDepartments = async (req: Request, res: Response) => {
   try {
     const departments = await prisma.department.findMany();
+    console.log(departments);
     res.json(departments);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: 'Something went wrong' });
   }
 };

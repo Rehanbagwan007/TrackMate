@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
@@ -78,7 +78,7 @@ export const registerUser = async (req: Request, res: Response) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      token: generateToken(user.id),
+      token: generateToken(user.id as unknown as string),
     });
   } catch (error) {
     console.error(error);
@@ -98,7 +98,7 @@ export const loginUser = async (req: Request, res: Response) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        token: generateToken(user.id),
+        token: generateToken(user.id as unknown as string ),
       });
     } else {
       res.status(401).json({ message: 'Invalid credentials' });
