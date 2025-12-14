@@ -16,7 +16,7 @@ import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MainLayout from "./components/MainLayout";
 import DashboardRedirect from "./components/DashboardRedirect";
-import { SidebarProvider } from "./context/sidebar";
+import { SidebarProvider } from "./contexts/sidebar";
 
 const queryClient = new QueryClient();
 
