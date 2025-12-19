@@ -1,55 +1,13 @@
-import { useState } from "react";
-import { useLocation, Link } from "react-router-dom";
-import { useRole } from "@/contexts/RoleContext";
-import {
-  LayoutDashboard,
-  Calendar,
-  BookOpen,
-  FileText,
-  Users,
-  Settings,
-  LogOut,
-  User,
-  QrCode,
-  Award,
-  FileSpreadsheet,
-  Presentation,
-  Code,
-  Building2,
-  ClipboardCheck,
-  GraduationCap,
-} from "lucide-react";
-
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarHeader,
-  SidebarFooter,
-  useSidebar,
-} from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-
-// Mock user data - in real app this would come from auth context
-const user = {
-  name: "John Doe",
-  email: "john@example.com",
-  role: "STUDENT",
-  department: "Computer Science",
-  avatar: "",
-};
+import { Home, Book, Calendar, FileText, Settings, LogOut, Users, BarChart2, Folder, Edit2, Code, File, Presentation, GitBranch, Cpu, LayoutDashboard, BookOpen, ClipboardCheck, Award, QrCode } from "lucide-react";
+import { NavLink } from "react-router-dom";
+import { useRole } from "../contexts/RoleContext";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 // Role-based navigation items
 const getNavigationItems = (role: string) => {
   const baseItems = {
     student: [
-      { title: "Dashboard", url: "/", icon: LayoutDashboard },
+      { title: "Dashboard", url: "/student", icon: LayoutDashboard },
       { title: "Attendance", url: "/attendance", icon: Calendar },
       { title: "Assignments", url: "/assignments", icon: BookOpen },
       { title: "Notes", url: "/notes", icon: FileText },
@@ -58,184 +16,96 @@ const getNavigationItems = (role: string) => {
     ],
     faculty: [
       { title: "Dashboard", url: "/faculty", icon: LayoutDashboard },
-      { title: "My Classes", url: "/faculty", icon: BookOpen },
-      { title: "Attendance", url: "/attendance", icon: Calendar },
-      { title: "Assignments", url: "/faculty", icon: ClipboardCheck },
-      { title: "Materials", url: "/materials", icon: FileText },
+      { title: "My Classes", url: "/faculty/my-classes", icon: BookOpen },
+      { title: "Attendance", url: "/faculty/attendance", icon: Calendar },
+      { title: "Assignments", url: "/faculty/assignments", icon: ClipboardCheck },
+      { title: "Materials", url: "/faculty/materials", icon: FileText },
     ],
     hod: [
       { title: "Dashboard", url: "/hod", icon: LayoutDashboard },
-      { title: "Faculty", url: "/hod", icon: Users },
-      { title: "Students", url: "/hod", icon: GraduationCap },
-      { title: "Reports", url: "/reports", icon: FileText },
-      { title: "Announcements", url: "/announcements", icon: Award },
+      { title: "Faculty", url: "/hod/faculty", icon: Users },
     ],
     admin: [
-      { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
-      { title: "Departments", url: "/admin", icon: Building2 },
-      { title: "Faculty", url: "/admin", icon: Users },
-      { title: "Students", url: "/admin", icon: GraduationCap },
-      { title: "Analytics", url: "/analytics", icon: Award },
-    ],
+        { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
+    ]
   };
 
-  return baseItems[role as keyof typeof baseItems] || baseItems.student;
+  return baseItems[role] || [];
 };
 
-const editorItems = [
-  { title: "Document Editor", url: "/editor/document", icon: FileText },
-  { title: "Spreadsheet", url: "/editor/spreadsheet", icon: FileSpreadsheet },
-  { title: "Presentation", url: "/editor/presentation", icon: Presentation },
-  { title: "Code Editor", url: "/editor/code", icon: Code },
+const editorLinks = [
+    { title: "Document Editor", url: "/editor/document", icon: Edit2 },
+    { title: "Spreadsheet", url: "/editor/spreadsheet", icon: File },
+    { title: "Presentation", url: "/editor/presentation", icon: Presentation },
+    { title: "Code Editor", url: "/editor/code", icon: Code },
 ];
 
-const userItems = [
-  { title: "Profile", url: "/profile", icon: User },
-  { title: "Settings", url: "/settings", icon: Settings },
-];
-
-export function AppSidebar() {
-  const { state } = useSidebar();
-  const location = useLocation();
+const AppSidebar = () => {
   const { role } = useRole();
-  const currentPath = location.pathname;
-  const collapsed = state === "collapsed";
-
   const navigationItems = getNavigationItems(role);
 
-  const isActive = (path: string) => currentPath === path;
-
   return (
-    <Sidebar className={collapsed ? "w-16" : "w-64"} collapsible="icon">
-      <SidebarHeader className="p-4">
-        <div className="flex items-center space-x-3">
-          <div className="p-2 bg-primary rounded-lg">
-            <BookOpen className="h-6 w-6 text-primary-foreground" />
-          </div>
-          {!collapsed && (
-            <div>
-              <h2 className="text-lg font-semibold text-foreground">TrackMate</h2>
-              <p className="text-sm text-muted-foreground">Smart Classroom</p>
-            </div>
-          )}
-        </div>
-      </SidebarHeader>
+    <aside className="w-64 min-h-screen flex flex-col p-4 bg-card border-r fixed">
+      <div className="flex items-center gap-3 mb-8">
+        <GitBranch className="h-8 w-8 text-primary" />
+        <h1 className="text-2xl font-bold">TrackMate</h1>
+      </div>
 
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
-            Navigation
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navigationItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link
-                      to={item.url}
-                      className={`flex items-center space-x-3 ${
-                        isActive(item.url)
-                          ? "bg-primary text-primary-foreground"
-                          : "hover:bg-accent hover:text-accent-foreground"
-                      }`}
-                    >
-                      <item.icon className="h-5 w-5" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+      <nav className="flex flex-col gap-2 mb-8">
+          <p className="text-xs text-muted-foreground uppercase mb-2">Navigation</p>
+        {navigationItems.map((item) => (
+          <NavLink
+            key={item.title}
+            to={item.url}
+            end={item.url === '/faculty' || item.url === '/student' || item.url === '/hod' || item.url === '/admin'}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                isActive ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
+              }`
+            }
+          >
+            <item.icon className="h-5 w-5" />
+            {item.title}
+          </NavLink>
+        ))}
+      </nav>
+      
+      <nav className="flex flex-col gap-2">
+          <p className="text-xs text-muted-foreground uppercase mb-2">Editors</p>
+           {editorLinks.map((item) => (
+          <NavLink
+            key={item.title}
+            to={item.url}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                isActive ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
+              }`
+            }
+          >
+            <item.icon className="h-5 w-5" />
+            {item.title}
+          </NavLink>
+        ))}
+      </nav>
 
-        <SidebarGroup>
-          <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
-            Editors
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {editorItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link
-                      to={item.url}
-                      className={`flex items-center space-x-3 ${
-                        isActive(item.url)
-                          ? "bg-primary text-primary-foreground"
-                          : "hover:bg-accent hover:text-accent-foreground"
-                      }`}
-                    >
-                      <item.icon className="h-5 w-5" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
-            Account
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {userItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link
-                      to={item.url}
-                      className={`flex items-center space-x-3 ${
-                        isActive(item.url)
-                          ? "bg-primary text-primary-foreground"
-                          : "hover:bg-accent hover:text-accent-foreground"
-                      }`}
-                    >
-                      <item.icon className="h-5 w-5" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-
-      <SidebarFooter className="p-4">
-        {!collapsed && (
-          <div className="space-y-4">
-            <div className="flex items-center space-x-3 p-3 bg-accent rounded-lg">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-foreground truncate">{user.name}</p>
-                <p className="text-xs text-muted-foreground uppercase">{user.role}</p>
-                <p className="text-xs text-muted-foreground truncate">{user.department}</p>
-              </div>
-            </div>
-            <Button variant="ghost" className="w-full justify-start" size="sm">
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
-            </Button>
-          </div>
-        )}
-        {collapsed && (
-          <div className="flex flex-col items-center space-y-2">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+      <div className="mt-auto">
+          <div className="flex items-center gap-3 p-3 rounded-md hover:bg-muted cursor-pointer">
+            <Avatar className="h-9 w-9">
+              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <Button variant="ghost" size="icon">
-              <LogOut className="h-4 w-4" />
-            </Button>
-          </div>
-        )}
-      </SidebarFooter>
-    </Sidebar>
+            <div>
+                <p className="text-sm font-semibold">John Doe</p>
+                <p className="text-xs text-muted-foreground">{role ? role.toUpperCase() : "NONE"}</p>
+            </div>
+        </div>
+        <div className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors text-muted-foreground hover:bg-muted cursor-pointer mt-2">
+          <LogOut className="h-5 w-5" />
+          Logout
+        </div>
+      </div>
+    </aside>
   );
-}
+};
+
+export default AppSidebar;
