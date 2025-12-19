@@ -20,6 +20,11 @@ import AdminDashboard from "./pages/AdminDashboard";
 import HODDashboard from "./pages/HODDashboard";
 import FacultyDashboard from "./pages/FacultyDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
+import MyClassesPage from "./pages/MyClassesPage";
+import FacultyAttendancePage from "./pages/FacultyAttendancePage";
+import FacultyAssignmentsPage from "./pages/FacultyAssignmentsPage";
+import MaterialsPage from "./pages/MaterialsPage";
+import QRScannerPage from "./pages/QRScannerPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,7 +49,12 @@ const App = () => {
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/hod" element={<HODDashboard />} />
               <Route path="/faculty" element={<FacultyDashboard />} />
+              <Route path="/faculty/my-classes" element={<MyClassesPage />} />
+              <Route path="/faculty/attendance" element={<FacultyAttendancePage />} />
+              <Route path="/faculty/assignments" element={<FacultyAssignmentsPage />} />
+              <Route path="/faculty/materials" element={<MaterialsPage />} />
               <Route path="/student" element={<StudentDashboard />} />
+              <Route path="/scanner" element={<QRScannerPage />} />
               <Route path="/editor/document" element={<DocumentEditor />} />
               <Route path="/editor/spreadsheet" element={<SpreadsheetEditor />} />
               <Route path="/editor/presentation" element={<PresentationEditor />} />

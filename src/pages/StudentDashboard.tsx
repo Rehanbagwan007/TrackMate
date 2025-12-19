@@ -4,7 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WeekChart } from "@/components/WeekChart";
 import { ProgressRing } from "@/components/ProgressRing";
 import { Button } from "@/components/ui/button";
-import { Calendar, BookOpen, Bell, Cpu } from "lucide-react";
+import { Calendar, BookOpen, Bell, Cpu, QrCode } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // Mock data
 const attendanceData = [
@@ -28,12 +29,20 @@ const announcements = [
 ]
 
 const StudentDashboard = () => {
+  const navigate = useNavigate();
+
   return (
     <Layout>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold">Student Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back, John!</p>
+        <div className='flex items-center justify-between'>
+          <div>
+            <h1 className="text-3xl font-bold">Student Dashboard</h1>
+            <p className="text-muted-foreground">Welcome back, John!</p>
+          </div>
+            <Button className="flex items-center gap-2" onClick={() => navigate("/student/qr-scanner")}>
+                <QrCode className="h-5 w-5" />
+                Scan QR
+            </Button>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {/* Attendance Overview */}
