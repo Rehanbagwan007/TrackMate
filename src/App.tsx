@@ -7,6 +7,11 @@ import { RoleProvider } from "./contexts/RoleContext";
 import Index from "./pages/Index";
 import { AuthPage } from "./pages/Auth";
 import { AttendancePage } from "./pages/AttendancePage";
+import AssignmentsPage from "./pages/AssignmentsPage";
+import ProfilePage from "./pages/ProfilePage";
+import NotesPage from "./pages/NotesPage";
+import CreateNotePage from "./pages/CreateNotePage";
+import GradesPage from "./pages/GradesPage";
 import { DocumentEditor } from "./pages/DocumentEditor";
 import { SpreadsheetEditor } from "./pages/SpreadsheetEditor";
 import { PresentationEditor } from "./pages/PresentationEditor";
@@ -31,6 +36,11 @@ const App = () => {
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/attendance" element={<AttendancePage />} />
+              <Route path="/assignments" element={<AssignmentsPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/notes" element={<NotesPage />} />
+              <Route path="/notes/create" element={<CreateNotePage />} />
+              <Route path="/grades" element={<GradesPage />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/hod" element={<HODDashboard />} />
               <Route path="/faculty" element={<FacultyDashboard />} />
