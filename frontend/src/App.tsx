@@ -16,7 +16,7 @@ import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MainLayout from "./components/MainLayout";
 import DashboardRedirect from "./components/DashboardRedirect";
-import { SidebarProvider } from "./contexts/sidebar";
+import { SidebarProvider } from "./components/ui/sidebar";
 
 const queryClient = new QueryClient();
 
@@ -32,7 +32,7 @@ const App = () => {
             <Route element={<ProtectedRoute />}>
               <Route
                 element={
-                  <SidebarProvider>
+                     <SidebarProvider>
                     <MainLayout />
                   </SidebarProvider>
                 }

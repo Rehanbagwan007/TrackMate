@@ -1,24 +1,13 @@
 
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
-
-interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    name: string;
-    email: string;
-    role: string;
-  };
-}
+import prisma from '../lib/prisma';
 
 // @desc    Get all courses
 // @route   GET /api/courses
 // @access  Public
 export const getCourses = async (req: Request, res: Response) => {
   try {
-    const courses = await prisma.course.findMany();
+    const courses = await prisma?.course.findMany();
     res.json(courses);
   } catch (error) {
     res.status(500).json({ message: 'Something went wrong' });
@@ -48,7 +37,7 @@ export const createCourse = async (req: Request, res: Response) => {
 // @desc    Get my courses
 // @route   GET /api/courses/mycourses
 // @access  Private (HOD or Faculty)
-export const getMyCourses = async (req: AuthRequest, res: Response) => {
+export const getMyCourses = async (req: Request, res: Response) => {
   try {
     const courses = await prisma.course.findMany({
       where: {

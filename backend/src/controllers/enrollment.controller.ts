@@ -1,18 +1,7 @@
 
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
-
-const prisma = new PrismaClient();
-
-interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    name: string;
-    email: string;
-    role: string;
-  };
-}
+import prisma from '../lib/prisma';
+import bcrypt from 'bcryptjs';
 
 export const createEnrollmentRequest = async (req: Request, res: Response) => {
   const { email, name, phone, departmentId, roleRequested, idProofUrl, faceEmbedding, biometricData, qualifications, rollNumber, year, division, password } = req.body;
@@ -45,7 +34,7 @@ export const createEnrollmentRequest = async (req: Request, res: Response) => {
   }
 };
 
-export const getEnrollmentRequests = async (req: AuthRequest, res: Response) => {
+export const getEnrollmentRequests = async (req: Request, res: Response) => {
   try {
     const requests = await prisma.enrollmentRequest.findMany({
       where: { status: 'pending' },
@@ -58,23 +47,23 @@ export const getEnrollmentRequests = async (req: AuthRequest, res: Response) => 
   }
 };
 
-export const updateEnrollmentRequest = async (req: AuthRequest, res: Response) => {
+export const updateEnrollmentRequest = async (req: Request, res: Response) => {
   const { status } = req.body;
   const { id } = req.params;
   const approverId = req.user?.id;
 
   try {
-    const request = await prisma.enrollmentRequest.findUnique({ where: { id: Number(id) } });
+    const request = await prisma.enrollmentRequest.findUnique({ where: { id: Number(id) as unknown as string } });
 
     if (!request) {
       return res.status(404).json({ message: 'Enrollment request not found' });
     }
 
     const updatedRequest = await prisma.enrollmentRequest.update({
-      where: { id: Number(id) },
+      where: { id: Number(id) as unknown as string },
       data: { 
         status, 
-        approver: approverId ? { connect: { id: Number(approverId) } } : undefined
+        approver: approverId ? { connect: { id: approverId } } : undefined
       },
     });
 

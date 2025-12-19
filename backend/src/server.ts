@@ -6,7 +6,7 @@ import { PrismaClient } from '@prisma/client';
 import routes from './routes';
 
 const app: Application = express();
-const prisma = new PrismaClient();
+
 
 // Middleware
 app.use(bodyParser.json());
