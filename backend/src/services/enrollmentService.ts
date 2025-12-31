@@ -1,4 +1,4 @@
-import prisma from '../prisma/client'
+import { prisma } from '../db/client'
 import bcrypt from 'bcrypt'
 import { storagePathForInstitute } from '../lib/supabaseClient'
 

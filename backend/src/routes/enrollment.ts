@@ -2,7 +2,7 @@ import express from 'express'
 import { authMiddleware, requireRole } from '../middleware/auth'
 import { requireTenant } from '../middleware/tenant'
 import * as enrollmentService from '../services/enrollmentService'
-
+import{ prisma } from '../db/client'
 const router = express.Router()
 
 // Create Department (Institute Admin)
