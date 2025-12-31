@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  INSTITUTE_ADMIN
+  HOD
+  FACULTY
+  STUDENT
+}
+
+enum InstituteStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+}
+
+model Institute {
+  id        String   @id @default(uuid())
+  name      String
+  code      String
+  status    InstituteStatus @default(PENDING)
+  createdAt DateTime @default(now())
+
+  departments Department[]
+  users       User[]
+  studentProfiles StudentAcademicProfile[]
+  facultySubjects  FacultySubject[]
+}
+
+model Department {
+  id          String   @id @default(uuid())
+  instituteId  String
+  institute    Institute @relation(fields: [instituteId], references: [id], onDelete: Cascade)
+  name        String
+  code        String
+  description String?
+  hodId       String? // user id of HOD
+  hod         User?    @relation("HODDepartment", fields: [hodId], references: [id])
+  @@unique([hodId])
+  createdAt   DateTime @default(now())
+
+  users       User[]   @relation("DepartmentUsers")
+
+  @@unique([instituteId, code])
+}
+
+model User {
+  id                 String   @id @default(uuid())
+  instituteId         String
+  institute           Institute @relation(fields: [instituteId], references: [id], onDelete: Cascade)
+  name               String
+  email              String
+  phone              String?
+  passwordHash       String
+  role               Role
+  departmentId       String?    
+  department         Department? @relation("DepartmentUsers", fields: [departmentId], references: [id])
+  faceData           String?    // nullable placeholder for face templates / references
+  rfidUid            String?    
+  biometricTemplate  String?
+  createdAt          DateTime @default(now())
+  studentProfile     StudentAcademicProfile?
+  hodDepartment      Department? @relation("HODDepartment")
+  facultySubjects    FacultySubject[]
+
+  @@unique([instituteId, email])
+}
+
+model StudentAcademicProfile {
+  id         String   @id @default(uuid())
+  instituteId String
+  institute   Institute @relation(fields: [instituteId], references: [id], onDelete: Cascade)
+  studentId  String   @unique
+  student    User     @relation(fields: [studentId], references: [id])
+
+  year       Int
+  semester   Int
+  division   String?
+}
+
+model FacultySubject {
+  id         String   @id @default(uuid())
+  instituteId String
+  institute   Institute @relation(fields: [instituteId], references: [id], onDelete: Cascade)
+  facultyId  String
+  faculty    User     @relation(fields: [facultyId], references: [id])
+  subjectName String
+}
