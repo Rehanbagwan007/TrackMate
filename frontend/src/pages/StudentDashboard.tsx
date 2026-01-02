@@ -8,7 +8,7 @@ import { Calendar, BookOpen, Bell, Cpu, QrCode } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/lib/useAuthStore";
-import api from "@/lib/api";
+import * as api from "@/lib/api";
 
 const StudentDashboard = () => {
     const navigate = useNavigate();

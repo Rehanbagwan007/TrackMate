@@ -4,9 +4,17 @@ dotenv.config()
 import express from 'express'
 import cors from 'cors'
 import { prisma } from './db/client'
+import morgan from "morgan"
+
 
 const app = express()
-app.use(cors())
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
+
+
+// Allow all origins
+app.use(cors({ origin: '*' }))
+
 app.use(express.json())
 
 app.get('/health', async (req, res) => {
@@ -22,9 +30,14 @@ app.get('/health', async (req, res) => {
 // Mount enrollment routes (secure, role-guarded)
 import enrollmentRouter from './routes/enrollment'
 import authRouter from './routes/auth'
+import adminRouter from './routes/admin'
+import hodRouter from './routes/hod'
 
 app.use('/api/enrollment', enrollmentRouter)
 app.use('/api/auth', authRouter)
+app.use('/api/admin', adminRouter)
+app.use('/api/hod', hodRouter)
+
 
 // NOTE: Enrollment logic lives in services and routes are thin controllers that enforce role + tenant guards.
 

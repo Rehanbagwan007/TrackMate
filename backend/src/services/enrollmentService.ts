@@ -11,12 +11,17 @@ export async function createDepartment(actor: Actor, data: { name: string; code:
   if (actor.role !== 'INSTITUTE_ADMIN') throw new Error('Forbidden')
 
   // Ensure scoping by instituteId
-  const dept = await prisma.department.create({
-    data: {
+  const dept = await prisma.department.upsert({
+    where: {
+      name_instituteId: {
+        name: data.name,
+        instituteId: actor.instituteId,
+      },
+    },
+    update: {},
+    create: {
       instituteId: actor.instituteId,
       name: data.name,
-      code: data.code,
-      description: data.description,
     },
   })
   return dept
@@ -39,7 +44,6 @@ export async function createHod(actor: Actor, data: { name: string; email: strin
       instituteId: actor.instituteId,
       name: data.name,
       email: data.email,
-      phone: data.phone,
       passwordHash,
       role: 'HOD',
       departmentId: dept.id,
@@ -71,7 +75,6 @@ export async function createFaculty(actor: Actor, data: { name: string; email: s
       instituteId: actor.instituteId,
       name: data.name,
       email: data.email,
-      phone: data.phone,
       passwordHash,
       role: 'FACULTY',
       departmentId: hodUser.departmentId,
@@ -79,7 +82,7 @@ export async function createFaculty(actor: Actor, data: { name: string; email: s
   })
 
   if (data.subjectSpecialization) {
-    await prisma.facultySubject.create({ data: { instituteId: actor.instituteId, facultyId: faculty.id, subjectName: data.subjectSpecialization } })
+    await prisma.facultySubject.create({ data: { subject: data.subjectSpecialization, facultyId: faculty.id, departmentId: hodUser.departmentId } })
   }
 
   return faculty
@@ -102,13 +105,11 @@ export async function enrollStudent(actor: Actor, data: { name: string; rollNumb
       instituteId: actor.instituteId,
       name: data.name,
       email: data.email,
-      rollNumber: data.rollNumber,
-      phone: data.phone,
       passwordHash,
       role: 'STUDENT',
-      faceData: data.faceData ?? null,
+      faceData: data.faceData ? Buffer.from(data.faceData, 'base64') : null,
       rfidUid: data.rfidUid ?? null,
-      biometricTemplate: data.biometricTemplate ?? null,
+      biometricTemplate: data.biometricTemplate ? Buffer.from(data.biometricTemplate, 'base64') : null,
     },
   })
 
@@ -120,6 +121,7 @@ export async function enrollStudent(actor: Actor, data: { name: string; rollNumb
       year: data.year,
       semester: data.semester,
       division: data.division,
+      rollNo: data.rollNumber,
     },
   })
 

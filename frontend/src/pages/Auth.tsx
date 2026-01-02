@@ -29,7 +29,8 @@ export function AuthPage() {
       else window.location.href = '/'
     } catch (err) {
       setIsLoading(false)
-      alert('Login failed')
+      console.error('Login failed:', err) // Log the error to the console
+      alert('Login failed. Check the console for more details.')
     }
   };
 

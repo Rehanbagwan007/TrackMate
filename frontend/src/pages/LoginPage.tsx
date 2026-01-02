@@ -20,6 +20,7 @@ const LoginPage = () => {
       await login(email, password);
       navigate("/");
     } catch (err: any) {
+      console.log(err)
       if (err.message.includes('Failed to fetch')) {
         setError("Cannot connect to the server. Please ensure the backend is running.");
       } else {
@@ -66,7 +67,7 @@ const LoginPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" onClick={handleLogin}>
               Login
             </Button>
           </div>

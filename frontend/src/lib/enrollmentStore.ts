@@ -1,5 +1,6 @@
 import { create } from 'zustand'
-import api from './api'
+
+import * as api from './api'
 import { useAuthStore } from './useAuthStore'
 
 type Dept = any

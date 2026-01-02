@@ -7,37 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
 import { useEnrollmentStore } from "@/lib/enrollmentStore";
 
-const stats = [
-  {
-    title: "Total Departments",
-    value: "12",
-    subtitle: "Active",
-    icon: <Building2 className="h-5 w-5" />,
-    variant: "primary" as const,
-  },
-  {
-    title: "Total Faculty",
-    value: "156",
-    subtitle: "Across departments",
-    icon: <Users className="h-5 w-5" />,
-    variant: "success" as const,
-  },
-  {
-    title: "Total Students",
-    value: "2,847",
-    subtitle: "Enrolled",
-    icon: <GraduationCap className="h-5 w-5" />,
-    variant: "default" as const,
-  },
-  {
-    title: "Avg Attendance",
-    value: "86%",
-    subtitle: "This month",
-    icon: <TrendingUp className="h-5 w-5" />,
-    variant: "warning" as const,
-  },
-];
-
 const recentAnnouncements = [
   {
     title: "Winter Break Schedule",
@@ -71,6 +40,37 @@ const AdminDashboard = () => {
   useEffect(() => {
     if (!enrollment.loading) enrollment.loadAll();
   }, []);
+
+  const stats = [
+    {
+      title: "Total Departments",
+      value: (enrollment.departments?.length || 0).toString(),
+      subtitle: "Active",
+      icon: <Building2 className="h-5 w-5" />,
+      variant: "primary" as const,
+    },
+    {
+      title: "Total Faculty",
+      value: (enrollment.faculty?.length || 0).toString(),
+      subtitle: "Across departments",
+      icon: <Users className="h-5 w-5" />,
+      variant: "success" as const,
+    },
+    {
+      title: "Total Students",
+      value: (enrollment.students?.length || 0).toString(),
+      subtitle: "Enrolled",
+      icon: <GraduationCap className="h-5 w-5" />,
+      variant: "default" as const,
+    },
+    {
+      title: "Avg Attendance",
+      value: "86%",
+      subtitle: "This month",
+      icon: <TrendingUp className="h-5 w-5" />,
+      variant: "warning" as const,
+    },
+  ];
 
   const handleCreateDepartmentAndHod = async () => {
     try {
