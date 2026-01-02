@@ -46,7 +46,7 @@ model Department {
   @@unique([hodId])
   createdAt   DateTime @default(now())
 
-  users       User[]   @relation("DepartmentUsers")
+  studentProfiles StudentAcademicProfile[]
 
   @@unique([instituteId, code])
 }
@@ -57,11 +57,10 @@ model User {
   institute           Institute @relation(fields: [instituteId], references: [id], onDelete: Cascade)
   name               String
   email              String
+  rollNumber         String?
   phone              String?
   passwordHash       String
   role               Role
-  departmentId       String?    
-  department         Department? @relation("DepartmentUsers", fields: [departmentId], references: [id])
   faceData           String?    // nullable placeholder for face templates / references
   rfidUid            String?    
   biometricTemplate  String?
@@ -71,6 +70,7 @@ model User {
   facultySubjects    FacultySubject[]
 
   @@unique([instituteId, email])
+  @@unique([instituteId, rollNumber])
 }
 
 model StudentAcademicProfile {
@@ -79,6 +79,8 @@ model StudentAcademicProfile {
   institute   Institute @relation(fields: [instituteId], references: [id], onDelete: Cascade)
   studentId  String   @unique
   student    User     @relation(fields: [studentId], references: [id])
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id])
 
   year       Int
   semester   Int
