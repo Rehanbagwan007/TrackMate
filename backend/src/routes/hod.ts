@@ -25,6 +25,8 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
       },
     });
 
+    console.log(hod)
+
     if (!hod) {
       return res.status(404).json({ message: 'HOD not found' });
     }
