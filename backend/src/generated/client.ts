@@ -62,3 +62,8 @@ export type StudentAcademicProfile = Prisma.StudentAcademicProfileModel
  * 
  */
 export type FacultySubject = Prisma.FacultySubjectModel
+/**
+ * Model Classroom
+ * 
+ */
+export type Classroom = Prisma.ClassroomModel

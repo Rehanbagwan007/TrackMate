@@ -53,4 +53,48 @@ router.post('/students', authMiddleware, requireRole('FACULTY'), requireTenant, 
   }
 })
 
+// List Departments for current institute
+router.get('/departments', authMiddleware, requireTenant, async (req, res) => {
+  const user = (req as any).user
+  try {
+    const depts = await prisma.department.findMany({ where: { instituteId: user.instituteId }, include: { hod: true } })
+    res.json(depts)
+  } catch (err: any) {
+    res.status(500).json({ error: err.message ?? String(err) })
+  }
+})
+
+// List HODs
+router.get('/hods', authMiddleware, requireTenant, async (req, res) => {
+  const user = (req as any).user
+  try {
+    const hods = await prisma.user.findMany({ where: { instituteId: user.instituteId, role: 'HOD' } })
+    res.json(hods)
+  } catch (err: any) {
+    res.status(500).json({ error: err.message ?? String(err) })
+  }
+})
+
+// List Faculty
+router.get('/faculty', authMiddleware, requireTenant, async (req, res) => {
+  const user = (req as any).user
+  try {
+    const faculty = await prisma.user.findMany({ where: { instituteId: user.instituteId, role: 'FACULTY' }, include: { facultySubjects: true } })
+    res.json(faculty)
+  } catch (err: any) {
+    res.status(500).json({ error: err.message ?? String(err) })
+  }
+})
+
+// List Students
+router.get('/students', authMiddleware, requireTenant, async (req, res) => {
+  const user = (req as any).user
+  try {
+    const students = await prisma.user.findMany({ where: { instituteId: user.instituteId, role: 'STUDENT' }, include: { studentProfile: true } })
+    res.json(students)
+  } catch (err: any) {
+    res.status(500).json({ error: err.message ?? String(err) })
+  }
+})
+
 export default router

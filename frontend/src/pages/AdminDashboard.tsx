@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, GraduationCap, Building2, TrendingUp, Bell, Plus, UserPlus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from "react";
+import { useEnrollmentStore } from "@/lib/enrollmentStore";
+import { useAuthStore } from "@/lib/useAuthStore";
 
 const stats = [
   {
@@ -65,6 +68,27 @@ const departments = [
 ];
 
 const AdminDashboard = () => {
+  const [showForm, setShowForm] = useState(true)
+  const [name, setName] = useState('')
+  const [code, setCode] = useState('')
+  const enrollment = useEnrollmentStore()
+  const user = useAuthStore((s) => s.user)
+
+  useEffect(() => {
+    if (!enrollment.loading) enrollment.loadAll()
+  }, [])
+
+  const handleCreate = async () => {
+    try {
+      await enrollment.createDepartment({ name, code })
+      setName('')
+      setCode('')
+      setShowForm(false)
+    } catch (err: any) {
+      alert(err.message || 'Failed')
+    }
+  }
+
   return (
     <Layout>
       <div className="space-y-8">
@@ -106,7 +130,7 @@ const AdminDashboard = () => {
                 <Button variant="outline" size="sm">Manage All</Button>
               </CardHeader>
               <CardContent className="space-y-4">
-                {departments.map((dept, index) => (
+                {enrollment.departments.map((dept: any, index: number) => (
                   <div key={index} className="p-4 rounded-lg border border-border hover:bg-muted/50 transition-colors">
                     <div className="flex justify-between items-start mb-3">
                       <div>
@@ -127,6 +151,18 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                 ))}
+                {showForm && (
+                  <div className="p-4 rounded-lg border border-border">
+                    <div className="space-y-2">
+                      <input className="w-full p-2 border rounded" placeholder="Department name" value={name} onChange={(e) => setName(e.target.value)} />
+                      <input className="w-full p-2 border rounded" placeholder="Department code" value={code} onChange={(e) => setCode(e.target.value)} />
+                      <div className="flex gap-2">
+                        <Button onClick={handleCreate}>Create</Button>
+                        <Button variant="ghost" onClick={() => setShowForm(false)}>Cancel</Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>

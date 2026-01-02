@@ -67,7 +67,29 @@ const recentActivity = [
   },
 ];
 
+import { useEffect, useState } from "react";
+import { useEnrollmentStore } from "@/lib/enrollmentStore";
+import { useAuthStore } from "@/lib/useAuthStore";
+
 const HODDashboard = () => {
+  const enrollment = useEnrollmentStore()
+  const [showForm, setShowForm] = useState(false)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  useEffect(() => { enrollment.loadAll() }, [])
+
+  const handleCreateFaculty = async () => {
+    try {
+      await enrollment.createFaculty({ name, email, password })
+      setShowForm(false)
+      setName('')
+      setEmail('')
+      setPassword('')
+    } catch (err: any) { alert(err.message || 'Failed') }
+  }
+
   return (
     <Layout>
       <div className="space-y-8">
@@ -104,7 +126,7 @@ const HODDashboard = () => {
                 <Button variant="outline" size="sm">View All</Button>
               </CardHeader>
               <CardContent className="space-y-4">
-                {facultyList.map((faculty, index) => (
+                {enrollment.faculty.map((faculty: any, index: number) => (
                   <div key={index} className="p-4 rounded-lg border border-border hover:bg-muted/50 transition-colors">
                     <div className="flex justify-between items-start mb-3">
                       <div>
@@ -121,15 +143,23 @@ const HODDashboard = () => {
                     <div className="flex gap-4 text-sm">
                       <div className="flex items-center gap-2">
                         <GraduationCap className="h-4 w-4 text-muted-foreground" />
-                        <span>{faculty.students} Students</span>
+                        <span>{faculty.students ?? '—'} Students</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <BookOpen className="h-4 w-4 text-muted-foreground" />
-                        <span>{faculty.classes} Classes/Week</span>
+                        <span>{faculty.classes ?? '—'} Classes/Week</span>
                       </div>
                     </div>
                   </div>
                 ))}
+                {showForm && (
+                  <div className="p-4 rounded-lg border border-border">
+                    <input className="w-full p-2 border rounded mb-2" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+                    <input className="w-full p-2 border rounded mb-2" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <input className="w-full p-2 border rounded mb-2" placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <div className="flex gap-2"><Button onClick={handleCreateFaculty}>Create Faculty</Button><Button variant="ghost" onClick={() => setShowForm(false)}>Cancel</Button></div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>

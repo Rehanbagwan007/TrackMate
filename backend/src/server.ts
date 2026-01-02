@@ -21,8 +21,10 @@ app.get('/health', async (req, res) => {
 
 // Mount enrollment routes (secure, role-guarded)
 import enrollmentRouter from './routes/enrollment'
+import authRouter from './routes/auth'
 
 app.use('/api/enrollment', enrollmentRouter)
+app.use('/api/auth', authRouter)
 
 // NOTE: Enrollment logic lives in services and routes are thin controllers that enforce role + tenant guards.
 

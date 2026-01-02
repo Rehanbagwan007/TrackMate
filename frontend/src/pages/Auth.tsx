@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/lib/useAuthStore";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,11 +15,22 @@ export function AuthPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      // In real app, handle authentication and redirect
-    }, 2000);
+    // Call backend login and store token
+    const form = e.target as HTMLFormElement
+    const email = (form.querySelector('#email') as HTMLInputElement).value
+    const password = (form.querySelector('#password') as HTMLInputElement).value
+    try {
+      const data = await useAuthStore.getState().login({ email, password })
+      setIsLoading(false)
+      const role = (data.user.role || '').toLowerCase()
+      if (role === 'institute_admin' || role === 'institute-admin' || role === 'admin') window.location.href = '/admin'
+      else if (role === 'hod') window.location.href = '/hod'
+      else if (role === 'faculty') window.location.href = '/faculty'
+      else window.location.href = '/'
+    } catch (err) {
+      setIsLoading(false)
+      alert('Login failed')
+    }
   };
 
   return (

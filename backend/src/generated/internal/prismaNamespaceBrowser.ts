@@ -55,7 +55,8 @@ export const ModelName = {
   Department: 'Department',
   User: 'User',
   StudentAcademicProfile: 'StudentAcademicProfile',
-  FacultySubject: 'FacultySubject'
+  FacultySubject: 'FacultySubject',
+  Classroom: 'Classroom'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -136,6 +137,19 @@ export const FacultySubjectScalarFieldEnum = {
 } as const
 
 export type FacultySubjectScalarFieldEnum = (typeof FacultySubjectScalarFieldEnum)[keyof typeof FacultySubjectScalarFieldEnum]
+
+
+export const ClassroomScalarFieldEnum = {
+  id: 'id',
+  instituteId: 'instituteId',
+  name: 'name',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  radiusMeters: 'radiusMeters',
+  createdAt: 'createdAt'
+} as const
+
+export type ClassroomScalarFieldEnum = (typeof ClassroomScalarFieldEnum)[keyof typeof ClassroomScalarFieldEnum]
 
 
 export const SortOrder = {

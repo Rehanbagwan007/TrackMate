@@ -6,32 +6,35 @@ import { ProgressRing } from "@/components/ProgressRing";
 import { Button } from "@/components/ui/button";
 import { Calendar, BookOpen, Bell, Cpu, QrCode } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-// Mock data
-const attendanceData = [
-  { day: 'M', hours: 8 },
-  { day: 'T', hours: 7 },
-  { day: 'W', hours: 8 },
-  { day: 'Th', hours: 6 },
-  { day: 'F', hours: 8 },
-  { day: 'S', hours: 4 },
-];
-
-const upcomingClasses = [
-    { time: "10:00 - 11:00", name: "Data Structures", faculty: "Dr. Sarah Johnson" },
-    { time: "11:00 - 12:00", name: "Algorithms", faculty: "Prof. Michael Chen" },
-    { time: "13:00 - 14:00", name: "Database Systems", faculty: "Dr. Robert Smith" },
-]
-
-const announcements = [
-    { title: "Mid-term exam schedule announced", from: "Faculty", time: "2 days ago" },
-    { title: "Guest lecture on AI", from: "HOD", time: "5 days ago" },
-]
+import { useEffect, useState } from "react";
+import { useAuthStore } from "@/lib/useAuthStore";
+import api from "@/lib/api";
 
 const StudentDashboard = () => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+    const token = useAuthStore((s) => s.token)
+    const [loading, setLoading] = useState(true)
+    const [attendanceData, setAttendanceData] = useState<any[]>([])
+    const [upcomingClasses, setUpcomingClasses] = useState<any[]>([])
+    const [announcements, setAnnouncements] = useState<any[]>([])
 
-  return (
+    useEffect(() => {
+        if (!token) return setLoading(false)
+        setLoading(true)
+        api.fetchStudentDashboard(token).then((res) => {
+            setUpcomingClasses(res.upcomingClasses || [])
+            setAnnouncements(res.announcements || [])
+            setAttendanceData(res.attendanceData || [])
+        }).catch(() => {
+            setUpcomingClasses([])
+            setAnnouncements([])
+            setAttendanceData([])
+        }).finally(() => setLoading(false))
+    }, [token])
+
+    if (loading) return <div>Loading...</div>
+
+    return (
     <Layout>
       <div className="space-y-6">
         <div className='flex items-center justify-between'>

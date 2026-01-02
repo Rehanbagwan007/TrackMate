@@ -2,9 +2,28 @@
 import { Layout } from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+import { useEnrollmentStore } from "@/lib/enrollmentStore";
 
 const FacultyDashboard = () => {
+  const enrollment = useEnrollmentStore()
+  const [show, setShow] = useState(false)
+  const [studentName, setStudentName] = useState('')
+  const [studentEmail, setStudentEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  useEffect(() => { enrollment.loadAll() }, [])
+
+  const handleEnroll = async () => {
+    try {
+      await enrollment.enrollStudent({ name: studentName, email: studentEmail, password, year: 1, semester: 1, departmentId: enrollment.departments[0]?.id })
+      setStudentName(''); setStudentEmail(''); setPassword(''); setShow(false)
+    } catch (err: any) { alert(err.message || 'Failed') }
+  }
+
   return (
+
+  // existing JSX moved below
     <Layout>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <Card>
