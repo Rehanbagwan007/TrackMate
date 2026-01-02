@@ -13,25 +13,19 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
   }
 
   try {
-    const hod = await prisma.hod.findUnique({
-      where: { id: user.id },
+    const department = await prisma.department.findUnique({
+      where: { hodId: user.id },
       include: {
-        department: {
-          include: {
-            faculty: true,
-            students: true,
-          },
-        },
+        members: true,
+        faculty: true,
       },
     });
 
-    console.log(hod)
-
-    if (!hod) {
-      return res.status(404).json({ message: 'HOD not found' });
+    if (!department) {
+      return res.status(404).json({ message: 'Department not found for this HOD' });
     }
 
-    res.json(hod.department);
+    res.json(department);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });

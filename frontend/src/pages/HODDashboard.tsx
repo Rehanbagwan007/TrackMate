@@ -48,6 +48,7 @@ const HODDashboard = () => {
       if (token) {
         try {
           const data = await fetchHODDashboard(token);
+          console.log(data)
           setDashboardData(data);
         } catch (error) {
           console.error("Error fetching HOD dashboard data:", error);
