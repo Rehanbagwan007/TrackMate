@@ -1,108 +1,114 @@
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
-  provider = "prisma-client-ts"
-  output   = "../src/generated"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-}
-
-enum Role {
-  INSTITUTE_ADMIN
-  HOD
-  FACULTY
-  STUDENT
-}
-
-enum InstituteStatus {
-  PENDING
-  ACTIVE
-  SUSPENDED
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Institute {
-  id        String   @id @default(uuid())
-  name      String
-  code      String
-  status    InstituteStatus @default(PENDING)
+  id     String @id @default(cuid())
+  name   String
+  code   String @unique
+  status String @default("PENDING")
+
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  users      User[]
   departments Department[]
-  users       User[]
-  studentProfiles StudentAcademicProfile[]
-  facultySubjects  FacultySubject[]
-  classrooms        Classroom[]
-}
+  students   StudentAcademicProfile[]
 
-model Department {
-  id          String   @id @default(uuid())
-  instituteId  String
-  institute    Institute @relation(fields: [instituteId], references: [id], onDelete: Cascade)
-  name        String
-  code        String
-  description String?
-  hodId       String? // user id of HOD
-  hod         User?    @relation("HODDepartment", fields: [hodId], references: [id])
-  @@unique([hodId])
-  createdAt   DateTime @default(now())
-
-  studentProfiles StudentAcademicProfile[]
-
-  @@unique([instituteId, code])
+  @@map("Institute")
 }
 
 model User {
-  id                 String   @id @default(uuid())
-  instituteId         String
-  institute           Institute @relation(fields: [instituteId], references: [id], onDelete: Cascade)
-  name               String
-  email              String
-  rollNumber         String?
-  phone              String?
-  passwordHash       String
-  role               Role
-  faceData           String?    // nullable placeholder for face templates / references
-  rfidUid            String?    
-  biometricTemplate  String?
-  createdAt          DateTime @default(now())
-  studentProfile     StudentAcademicProfile?
-  hodDepartment      Department? @relation("HODDepartment")
-  facultySubjects    FacultySubject[]
+  id           String @id @default(cuid())
+  name         String
+  email        String
+  passwordHash String
 
-  @@unique([instituteId, email])
-  @@unique([instituteId, rollNumber])
+  role String // INSTITUTE_ADMIN, DEPARTMENT_HOD, FACULTY, STUDENT
+
+  faceData         Bytes?
+  rfidUid          String?
+  biometricTemplate Bytes?
+
+  instituteId String
+  institute   Institute @relation(fields: [instituteId], references: [id], onDelete: Cascade)
+
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([email, instituteId])
+  @@map("User")
+}
+
+model Department {
+  id   String @id @default(cuid())
+  name String
+
+  instituteId String
+  institute   Institute @relation(fields: [instituteId], references: [id], onDelete: Cascade)
+
+  hodId String?
+  hod   User?   @relation()
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  faculty  FacultySubject[]
+  students StudentAcademicProfile[]
+
+  @@unique([name, instituteId])
+  @@map("Department")
 }
 
 model StudentAcademicProfile {
-  id         String   @id @default(uuid())
+  id        String @id @default(cuid())
+  year      Int
+  semester  Int
+  division  String
+  rollNo    String?
+  studentId String     @unique
+  student   User       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
   instituteId String
   institute   Institute @relation(fields: [instituteId], references: [id], onDelete: Cascade)
-  studentId  String   @unique
-  student    User     @relation(fields: [studentId], references: [id])
-  departmentId String
-  department   Department @relation(fields: [departmentId], references: [id])
 
-  year       Int
-  semester   Int
-  division   String?
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("StudentAcademicProfile")
 }
 
 model FacultySubject {
-  id         String   @id @default(uuid())
-  instituteId String
-  institute   Institute @relation(fields: [instituteId], references: [id], onDelete: Cascade)
-  facultyId  String
-  faculty    User     @relation(fields: [facultyId], references: [id])
-  subjectName String
+  id        String @id @default(cuid())
+  subject   String
+  facultyId String
+  faculty   User   @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("FacultySubject")
 }
 
-model Classroom {
-  id          String   @id @default(uuid())
-  instituteId String
-  institute   Institute @relation(fields: [instituteId], references: [id], onDelete: Cascade)
-  name        String
-  latitude    Float
-  longitude   Float
-  radiusMeters Int
-  createdAt   DateTime @default(now())
-}

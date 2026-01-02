@@ -1,38 +1,63 @@
-//import create from 'zustand'
-
 import { create } from 'zustand';
-import api from './api'
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { login as apiLogin, me } from '@/lib/api'; // Assuming you have an api file with login and me functions
 
-type LoginPayload = { email: string; password: string }
-
-type UserContext = {
-  id: string | null
-  name: string | null
-  email: string | null
-  role: string | null
-  instituteId: string | null
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: 'INSTITUTE_ADMIN' | 'HOD' | 'FACULTY' | 'STUDENT';
+  avatar?: string;
 }
 
-type AuthState = {
-  user: UserContext
-  token: string | null
-  setAuth: (user: UserContext, token: string) => void
-  clearAuth: () => void
+interface AuthState {
+  user: User | null;
+  token: string | null;
+  _hydrated: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+  checkAuth: () => Promise<void>;
+  setHydrated: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: { id: null, name: null, email: null, role: null, instituteId: null },
-  token: null,
-  setAuth: (user, token) => set({ user, token }),
-  login: async (payload: LoginPayload) => {
-    const { email, password } = payload
-    const data = await api.login(email, password)
-    set({ token: data.token, user: data.user })
-    return data
-  },
-  clearAuth: () => set({ user: { id: null, name: null, email: null, role: null, instituteId: null }, token: null }),
-}))
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set, get) => ({
+      user: null,
+      token: null,
+      _hydrated: false,
 
-// Notes:
-// - Frontend must never store Supabase keys or talk to Supabase directly.
-// - `instituteId` is provided by backend in the authenticated user context and persisted here.
+      setHydrated: () => set({ _hydrated: true }),
+
+      login: async (email, password) => {
+        const { token, user } = await apiLogin(email, password);
+        set({ user, token });
+      },
+
+      logout: () => {
+        set({ user: null, token: null });
+      },
+
+      checkAuth: async () => {
+        try {
+          const token = get().token;
+          if (token) {
+            const user = await me(token);
+            set({ user });
+          } else {
+            set({ user: null });
+          }
+        } catch (error) {
+          set({ user: null, token: null });
+        }
+      },
+    }),
+    {
+      name: 'auth-storage',
+      storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        state?.setHydrated();
+      },
+    }
+  )
+);

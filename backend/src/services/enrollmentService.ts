@@ -59,7 +59,7 @@ export async function createFaculty(actor: Actor, data: { name: string; email: s
   if (actor.role !== 'HOD') throw new Error('Forbidden')
 
   // Ensure actor has a department
-  const hodUser = await prisma.user.findUnique({ where: { id: actor.id } })
+  const hodUser = await prisma.user.findUnique({ where: { id: actor.id }, include: { department: true } })
   if (!hodUser?.departmentId) throw new Error('HOD not assigned to a department')
 
   if (hodUser.instituteId !== actor.instituteId) throw new Error('Cross-institute access denied')
@@ -102,10 +102,10 @@ export async function enrollStudent(actor: Actor, data: { name: string; rollNumb
       instituteId: actor.instituteId,
       name: data.name,
       email: data.email,
+      rollNumber: data.rollNumber,
       phone: data.phone,
       passwordHash,
       role: 'STUDENT',
-      departmentId: dept.id,
       faceData: data.faceData ?? null,
       rfidUid: data.rfidUid ?? null,
       biometricTemplate: data.biometricTemplate ?? null,
@@ -116,6 +116,7 @@ export async function enrollStudent(actor: Actor, data: { name: string; rollNumb
     data: {
       instituteId: actor.instituteId,
       studentId: student.id,
+      departmentId: dept.id,
       year: data.year,
       semester: data.semester,
       division: data.division,

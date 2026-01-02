@@ -2,8 +2,11 @@ import { Layout } from "@/components/Layout";
 import { StatCard } from "@/components/StatCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, GraduationCap, BookOpen, TrendingUp, Bell, ClipboardList } from "lucide-react";
+import { Users, GraduationCap, BookOpen, TrendingUp, Bell, ClipboardList, Plus, Camera } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useEffect, useState, useRef } from "react";
+import { useEnrollmentStore } from "@/lib/enrollmentStore";
+import Webcam from "react-webcam";
 
 const stats = [
   {
@@ -36,13 +39,6 @@ const stats = [
   },
 ];
 
-const facultyList = [
-  { name: "Dr. Sarah Johnson", subject: "Data Structures", students: 45, classes: 3, status: "active" },
-  { name: "Prof. Michael Chen", subject: "Algorithms", students: 52, classes: 4, status: "active" },
-  { name: "Dr. Robert Smith", subject: "Database Systems", students: 48, classes: 3, status: "active" },
-  { name: "Prof. Emily Davis", subject: "Web Development", students: 51, classes: 4, status: "on-leave" },
-];
-
 const recentActivity = [
   {
     type: "assignment",
@@ -67,55 +63,62 @@ const recentActivity = [
   },
 ];
 
-import { useEffect, useState } from "react";
-import { useEnrollmentStore } from "@/lib/enrollmentStore";
-import { useAuthStore } from "@/lib/useAuthStore";
-
 const HODDashboard = () => {
-  const enrollment = useEnrollmentStore()
-  const [showForm, setShowForm] = useState(false)
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [showEnrollFacultyForm, setShowEnrollFacultyForm] = useState(false);
+  const [facultyName, setFacultyName] = useState('');
+  const [facultyEmail, setFacultyEmail] = useState('');
+  const [facultyPassword, setFacultyPassword] = useState('');
+  const [faceImage, setFaceImage] = useState<string | null>(null);
+  const enrollment = useEnrollmentStore();
+  const webcamRef = useRef<Webcam>(null);
 
-  useEffect(() => { enrollment.loadAll() }, [])
+  useEffect(() => {
+    enrollment.loadAll();
+  }, []);
 
-  const handleCreateFaculty = async () => {
+  const captureFaceData = () => {
+    const imageSrc = webcamRef.current?.getScreenshot();
+    if (imageSrc) {
+      setFaceImage(imageSrc);
+    }
+  };
+
+  const handleEnrollFaculty = async () => {
     try {
-      await enrollment.createFaculty({ name, email, password })
-      setShowForm(false)
-      setName('')
-      setEmail('')
-      setPassword('')
-    } catch (err: any) { alert(err.message || 'Failed') }
-  }
+      await enrollment.createFaculty({
+        name: facultyName,
+        email: facultyEmail,
+        password: facultyPassword,
+        faceData: faceImage, // Sending base64 image data
+      });
+      // Reset form and hide
+      setFacultyName('');
+      setFacultyEmail('');
+      setFacultyPassword('');
+      setFaceImage(null);
+      setShowEnrollFacultyForm(false);
+    } catch (err: any) {
+      alert(err.message || 'Failed');
+    }
+  };
 
   return (
     <Layout>
       <div className="space-y-8">
-        {/* Header */}
         <div className="bg-gradient-hero p-8 rounded-2xl text-primary-foreground shadow-elevated">
           <div className="max-w-4xl">
             <h1 className="text-3xl font-bold mb-2">HOD Dashboard</h1>
             <p className="text-primary-foreground/90 text-lg">Computer Science Department</p>
-            <div className="flex items-center space-x-4 mt-4">
-              <div className="bg-primary-foreground/20 px-3 py-1 rounded-full">
-                <span className="text-sm font-medium">Dr. Sarah Johnson - HOD</span>
-              </div>
-            </div>
           </div>
         </div>
 
-        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
             <StatCard key={index} {...stat} />
           ))}
         </div>
 
-        {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Faculty Management */}
           <div className="lg:col-span-2">
             <Card className="shadow-card">
               <CardHeader className="flex flex-row items-center justify-between">
@@ -123,48 +126,73 @@ const HODDashboard = () => {
                   <Users className="h-5 w-5 text-primary" />
                   <span>Department Faculty</span>
                 </CardTitle>
-                <Button variant="outline" size="sm">View All</Button>
+                <Button variant="outline" size="sm" onClick={() => setShowEnrollFacultyForm(true)}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Enroll Faculty
+                </Button>
               </CardHeader>
               <CardContent className="space-y-4">
+                {showEnrollFacultyForm && (
+                  <div className="p-4 rounded-lg border border-border bg-muted/50">
+                    <h4 className="font-semibold text-lg mb-4">Enroll New Faculty</h4>
+                    <div className="space-y-4">
+                      <input className="w-full p-2 border rounded" placeholder="Faculty Name" value={facultyName} onChange={(e) => setFacultyName(e.target.value)} />
+                      <input className="w-full p-2 border rounded" placeholder="Faculty Email" value={facultyEmail} onChange={(e) => setFacultyEmail(e.target.value)} />
+                      <input className="w-full p-2 border rounded" placeholder="Password" type="password" value={facultyPassword} onChange={(e) => setFacultyPassword(e.target.value)} />
+                      
+                      <div className="p-4 border rounded bg-gray-100 text-center space-y-4">
+                        <h5 className="font-semibold">Face Enrollment</h5>
+                        {faceImage ? (
+                          <div className="flex flex-col items-center gap-4">
+                            <img src={faceImage} alt="Captured face" className="rounded-lg w-48 h-auto" />
+                            <Button variant="outline" onClick={() => setFaceImage(null)}>Retake Photo</Button>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center gap-4">
+                            <Webcam
+                              audio={false}
+                              ref={webcamRef}
+                              screenshotFormat="image/jpeg"
+                              className="rounded-lg"
+                              width={320}
+                              height={240}
+                            />
+                            <Button onClick={captureFaceData} className="gap-2">
+                              <Camera className="h-4 w-4" />
+                              Capture Photo
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="p-4 border rounded bg-gray-100 text-center">
+                         <h5 className="font-semibold">Fingerprint Enrollment</h5>
+                        <p className="text-sm text-gray-500 mt-2">Fingerprint enrollment requires a separate desktop application and is not supported directly in the browser.</p>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Button onClick={handleEnrollFaculty} disabled={!faceImage}>Enroll</Button>
+                        <Button variant="ghost" onClick={() => setShowEnrollFacultyForm(false)}>Cancel</Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {enrollment.faculty.map((faculty: any, index: number) => (
                   <div key={index} className="p-4 rounded-lg border border-border hover:bg-muted/50 transition-colors">
                     <div className="flex justify-between items-start mb-3">
                       <div>
-                        <div className="flex items-center gap-2">
-                          <h4 className="font-semibold text-foreground">{faculty.name}</h4>
-                          <Badge variant={faculty.status === "active" ? "default" : "secondary"}>
-                            {faculty.status}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground">{faculty.subject}</p>
+                        <h4 className="font-semibold text-foreground">{faculty.name}</h4>
+                        <p className="text-sm text-muted-foreground">{faculty.subject || 'No subject assigned'}</p>
                       </div>
                       <Button variant="ghost" size="sm">Details</Button>
                     </div>
-                    <div className="flex gap-4 text-sm">
-                      <div className="flex items-center gap-2">
-                        <GraduationCap className="h-4 w-4 text-muted-foreground" />
-                        <span>{faculty.students ?? '—'} Students</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <BookOpen className="h-4 w-4 text-muted-foreground" />
-                        <span>{faculty.classes ?? '—'} Classes/Week</span>
-                      </div>
-                    </div>
                   </div>
                 ))}
-                {showForm && (
-                  <div className="p-4 rounded-lg border border-border">
-                    <input className="w-full p-2 border rounded mb-2" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-                    <input className="w-full p-2 border rounded mb-2" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    <input className="w-full p-2 border rounded mb-2" placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <div className="flex gap-2"><Button onClick={handleCreateFaculty}>Create Faculty</Button><Button variant="ghost" onClick={() => setShowForm(false)}>Cancel</Button></div>
-                  </div>
-                )}
               </CardContent>
             </Card>
           </div>
 
-          {/* Recent Activity */}
           <div>
             <Card className="shadow-card">
               <CardHeader>

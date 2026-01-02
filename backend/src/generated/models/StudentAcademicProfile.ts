@@ -40,6 +40,7 @@ export type StudentAcademicProfileMinAggregateOutputType = {
   id: string | null
   instituteId: string | null
   studentId: string | null
+  departmentId: string | null
   year: number | null
   semester: number | null
   division: string | null
@@ -49,6 +50,7 @@ export type StudentAcademicProfileMaxAggregateOutputType = {
   id: string | null
   instituteId: string | null
   studentId: string | null
+  departmentId: string | null
   year: number | null
   semester: number | null
   division: string | null
@@ -58,6 +60,7 @@ export type StudentAcademicProfileCountAggregateOutputType = {
   id: number
   instituteId: number
   studentId: number
+  departmentId: number
   year: number
   semester: number
   division: number
@@ -79,6 +82,7 @@ export type StudentAcademicProfileMinAggregateInputType = {
   id?: true
   instituteId?: true
   studentId?: true
+  departmentId?: true
   year?: true
   semester?: true
   division?: true
@@ -88,6 +92,7 @@ export type StudentAcademicProfileMaxAggregateInputType = {
   id?: true
   instituteId?: true
   studentId?: true
+  departmentId?: true
   year?: true
   semester?: true
   division?: true
@@ -97,6 +102,7 @@ export type StudentAcademicProfileCountAggregateInputType = {
   id?: true
   instituteId?: true
   studentId?: true
+  departmentId?: true
   year?: true
   semester?: true
   division?: true
@@ -193,6 +199,7 @@ export type StudentAcademicProfileGroupByOutputType = {
   id: string
   instituteId: string
   studentId: string
+  departmentId: string
   year: number
   semester: number
   division: string | null
@@ -225,22 +232,26 @@ export type StudentAcademicProfileWhereInput = {
   id?: Prisma.StringFilter<"StudentAcademicProfile"> | string
   instituteId?: Prisma.StringFilter<"StudentAcademicProfile"> | string
   studentId?: Prisma.StringFilter<"StudentAcademicProfile"> | string
+  departmentId?: Prisma.StringFilter<"StudentAcademicProfile"> | string
   year?: Prisma.IntFilter<"StudentAcademicProfile"> | number
   semester?: Prisma.IntFilter<"StudentAcademicProfile"> | number
   division?: Prisma.StringNullableFilter<"StudentAcademicProfile"> | string | null
   institute?: Prisma.XOR<Prisma.InstituteScalarRelationFilter, Prisma.InstituteWhereInput>
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  department?: Prisma.XOR<Prisma.DepartmentScalarRelationFilter, Prisma.DepartmentWhereInput>
 }
 
 export type StudentAcademicProfileOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   instituteId?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
+  departmentId?: Prisma.SortOrder
   year?: Prisma.SortOrder
   semester?: Prisma.SortOrder
   division?: Prisma.SortOrderInput | Prisma.SortOrder
   institute?: Prisma.InstituteOrderByWithRelationInput
   student?: Prisma.UserOrderByWithRelationInput
+  department?: Prisma.DepartmentOrderByWithRelationInput
 }
 
 export type StudentAcademicProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -250,17 +261,20 @@ export type StudentAcademicProfileWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.StudentAcademicProfileWhereInput[]
   NOT?: Prisma.StudentAcademicProfileWhereInput | Prisma.StudentAcademicProfileWhereInput[]
   instituteId?: Prisma.StringFilter<"StudentAcademicProfile"> | string
+  departmentId?: Prisma.StringFilter<"StudentAcademicProfile"> | string
   year?: Prisma.IntFilter<"StudentAcademicProfile"> | number
   semester?: Prisma.IntFilter<"StudentAcademicProfile"> | number
   division?: Prisma.StringNullableFilter<"StudentAcademicProfile"> | string | null
   institute?: Prisma.XOR<Prisma.InstituteScalarRelationFilter, Prisma.InstituteWhereInput>
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  department?: Prisma.XOR<Prisma.DepartmentScalarRelationFilter, Prisma.DepartmentWhereInput>
 }, "id" | "studentId">
 
 export type StudentAcademicProfileOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   instituteId?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
+  departmentId?: Prisma.SortOrder
   year?: Prisma.SortOrder
   semester?: Prisma.SortOrder
   division?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -278,6 +292,7 @@ export type StudentAcademicProfileScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"StudentAcademicProfile"> | string
   instituteId?: Prisma.StringWithAggregatesFilter<"StudentAcademicProfile"> | string
   studentId?: Prisma.StringWithAggregatesFilter<"StudentAcademicProfile"> | string
+  departmentId?: Prisma.StringWithAggregatesFilter<"StudentAcademicProfile"> | string
   year?: Prisma.IntWithAggregatesFilter<"StudentAcademicProfile"> | number
   semester?: Prisma.IntWithAggregatesFilter<"StudentAcademicProfile"> | number
   division?: Prisma.StringNullableWithAggregatesFilter<"StudentAcademicProfile"> | string | null
@@ -290,12 +305,14 @@ export type StudentAcademicProfileCreateInput = {
   division?: string | null
   institute: Prisma.InstituteCreateNestedOneWithoutStudentProfilesInput
   student: Prisma.UserCreateNestedOneWithoutStudentProfileInput
+  department: Prisma.DepartmentCreateNestedOneWithoutStudentProfilesInput
 }
 
 export type StudentAcademicProfileUncheckedCreateInput = {
   id?: string
   instituteId: string
   studentId: string
+  departmentId: string
   year: number
   semester: number
   division?: string | null
@@ -308,12 +325,14 @@ export type StudentAcademicProfileUpdateInput = {
   division?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   institute?: Prisma.InstituteUpdateOneRequiredWithoutStudentProfilesNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
+  department?: Prisma.DepartmentUpdateOneRequiredWithoutStudentProfilesNestedInput
 }
 
 export type StudentAcademicProfileUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   instituteId?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
   semester?: Prisma.IntFieldUpdateOperationsInput | number
   division?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -323,6 +342,7 @@ export type StudentAcademicProfileCreateManyInput = {
   id?: string
   instituteId: string
   studentId: string
+  departmentId: string
   year: number
   semester: number
   division?: string | null
@@ -339,6 +359,7 @@ export type StudentAcademicProfileUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   instituteId?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
   semester?: Prisma.IntFieldUpdateOperationsInput | number
   division?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -363,6 +384,7 @@ export type StudentAcademicProfileCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   instituteId?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
+  departmentId?: Prisma.SortOrder
   year?: Prisma.SortOrder
   semester?: Prisma.SortOrder
   division?: Prisma.SortOrder
@@ -377,6 +399,7 @@ export type StudentAcademicProfileMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   instituteId?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
+  departmentId?: Prisma.SortOrder
   year?: Prisma.SortOrder
   semester?: Prisma.SortOrder
   division?: Prisma.SortOrder
@@ -386,6 +409,7 @@ export type StudentAcademicProfileMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   instituteId?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
+  departmentId?: Prisma.SortOrder
   year?: Prisma.SortOrder
   semester?: Prisma.SortOrder
   division?: Prisma.SortOrder
@@ -438,6 +462,48 @@ export type StudentAcademicProfileUncheckedUpdateManyWithoutInstituteNestedInput
   deleteMany?: Prisma.StudentAcademicProfileScalarWhereInput | Prisma.StudentAcademicProfileScalarWhereInput[]
 }
 
+export type StudentAcademicProfileCreateNestedManyWithoutDepartmentInput = {
+  create?: Prisma.XOR<Prisma.StudentAcademicProfileCreateWithoutDepartmentInput, Prisma.StudentAcademicProfileUncheckedCreateWithoutDepartmentInput> | Prisma.StudentAcademicProfileCreateWithoutDepartmentInput[] | Prisma.StudentAcademicProfileUncheckedCreateWithoutDepartmentInput[]
+  connectOrCreate?: Prisma.StudentAcademicProfileCreateOrConnectWithoutDepartmentInput | Prisma.StudentAcademicProfileCreateOrConnectWithoutDepartmentInput[]
+  createMany?: Prisma.StudentAcademicProfileCreateManyDepartmentInputEnvelope
+  connect?: Prisma.StudentAcademicProfileWhereUniqueInput | Prisma.StudentAcademicProfileWhereUniqueInput[]
+}
+
+export type StudentAcademicProfileUncheckedCreateNestedManyWithoutDepartmentInput = {
+  create?: Prisma.XOR<Prisma.StudentAcademicProfileCreateWithoutDepartmentInput, Prisma.StudentAcademicProfileUncheckedCreateWithoutDepartmentInput> | Prisma.StudentAcademicProfileCreateWithoutDepartmentInput[] | Prisma.StudentAcademicProfileUncheckedCreateWithoutDepartmentInput[]
+  connectOrCreate?: Prisma.StudentAcademicProfileCreateOrConnectWithoutDepartmentInput | Prisma.StudentAcademicProfileCreateOrConnectWithoutDepartmentInput[]
+  createMany?: Prisma.StudentAcademicProfileCreateManyDepartmentInputEnvelope
+  connect?: Prisma.StudentAcademicProfileWhereUniqueInput | Prisma.StudentAcademicProfileWhereUniqueInput[]
+}
+
+export type StudentAcademicProfileUpdateManyWithoutDepartmentNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentAcademicProfileCreateWithoutDepartmentInput, Prisma.StudentAcademicProfileUncheckedCreateWithoutDepartmentInput> | Prisma.StudentAcademicProfileCreateWithoutDepartmentInput[] | Prisma.StudentAcademicProfileUncheckedCreateWithoutDepartmentInput[]
+  connectOrCreate?: Prisma.StudentAcademicProfileCreateOrConnectWithoutDepartmentInput | Prisma.StudentAcademicProfileCreateOrConnectWithoutDepartmentInput[]
+  upsert?: Prisma.StudentAcademicProfileUpsertWithWhereUniqueWithoutDepartmentInput | Prisma.StudentAcademicProfileUpsertWithWhereUniqueWithoutDepartmentInput[]
+  createMany?: Prisma.StudentAcademicProfileCreateManyDepartmentInputEnvelope
+  set?: Prisma.StudentAcademicProfileWhereUniqueInput | Prisma.StudentAcademicProfileWhereUniqueInput[]
+  disconnect?: Prisma.StudentAcademicProfileWhereUniqueInput | Prisma.StudentAcademicProfileWhereUniqueInput[]
+  delete?: Prisma.StudentAcademicProfileWhereUniqueInput | Prisma.StudentAcademicProfileWhereUniqueInput[]
+  connect?: Prisma.StudentAcademicProfileWhereUniqueInput | Prisma.StudentAcademicProfileWhereUniqueInput[]
+  update?: Prisma.StudentAcademicProfileUpdateWithWhereUniqueWithoutDepartmentInput | Prisma.StudentAcademicProfileUpdateWithWhereUniqueWithoutDepartmentInput[]
+  updateMany?: Prisma.StudentAcademicProfileUpdateManyWithWhereWithoutDepartmentInput | Prisma.StudentAcademicProfileUpdateManyWithWhereWithoutDepartmentInput[]
+  deleteMany?: Prisma.StudentAcademicProfileScalarWhereInput | Prisma.StudentAcademicProfileScalarWhereInput[]
+}
+
+export type StudentAcademicProfileUncheckedUpdateManyWithoutDepartmentNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentAcademicProfileCreateWithoutDepartmentInput, Prisma.StudentAcademicProfileUncheckedCreateWithoutDepartmentInput> | Prisma.StudentAcademicProfileCreateWithoutDepartmentInput[] | Prisma.StudentAcademicProfileUncheckedCreateWithoutDepartmentInput[]
+  connectOrCreate?: Prisma.StudentAcademicProfileCreateOrConnectWithoutDepartmentInput | Prisma.StudentAcademicProfileCreateOrConnectWithoutDepartmentInput[]
+  upsert?: Prisma.StudentAcademicProfileUpsertWithWhereUniqueWithoutDepartmentInput | Prisma.StudentAcademicProfileUpsertWithWhereUniqueWithoutDepartmentInput[]
+  createMany?: Prisma.StudentAcademicProfileCreateManyDepartmentInputEnvelope
+  set?: Prisma.StudentAcademicProfileWhereUniqueInput | Prisma.StudentAcademicProfileWhereUniqueInput[]
+  disconnect?: Prisma.StudentAcademicProfileWhereUniqueInput | Prisma.StudentAcademicProfileWhereUniqueInput[]
+  delete?: Prisma.StudentAcademicProfileWhereUniqueInput | Prisma.StudentAcademicProfileWhereUniqueInput[]
+  connect?: Prisma.StudentAcademicProfileWhereUniqueInput | Prisma.StudentAcademicProfileWhereUniqueInput[]
+  update?: Prisma.StudentAcademicProfileUpdateWithWhereUniqueWithoutDepartmentInput | Prisma.StudentAcademicProfileUpdateWithWhereUniqueWithoutDepartmentInput[]
+  updateMany?: Prisma.StudentAcademicProfileUpdateManyWithWhereWithoutDepartmentInput | Prisma.StudentAcademicProfileUpdateManyWithWhereWithoutDepartmentInput[]
+  deleteMany?: Prisma.StudentAcademicProfileScalarWhereInput | Prisma.StudentAcademicProfileScalarWhereInput[]
+}
+
 export type StudentAcademicProfileCreateNestedOneWithoutStudentInput = {
   create?: Prisma.XOR<Prisma.StudentAcademicProfileCreateWithoutStudentInput, Prisma.StudentAcademicProfileUncheckedCreateWithoutStudentInput>
   connectOrCreate?: Prisma.StudentAcademicProfileCreateOrConnectWithoutStudentInput
@@ -484,11 +550,13 @@ export type StudentAcademicProfileCreateWithoutInstituteInput = {
   semester: number
   division?: string | null
   student: Prisma.UserCreateNestedOneWithoutStudentProfileInput
+  department: Prisma.DepartmentCreateNestedOneWithoutStudentProfilesInput
 }
 
 export type StudentAcademicProfileUncheckedCreateWithoutInstituteInput = {
   id?: string
   studentId: string
+  departmentId: string
   year: number
   semester: number
   division?: string | null
@@ -527,9 +595,54 @@ export type StudentAcademicProfileScalarWhereInput = {
   id?: Prisma.StringFilter<"StudentAcademicProfile"> | string
   instituteId?: Prisma.StringFilter<"StudentAcademicProfile"> | string
   studentId?: Prisma.StringFilter<"StudentAcademicProfile"> | string
+  departmentId?: Prisma.StringFilter<"StudentAcademicProfile"> | string
   year?: Prisma.IntFilter<"StudentAcademicProfile"> | number
   semester?: Prisma.IntFilter<"StudentAcademicProfile"> | number
   division?: Prisma.StringNullableFilter<"StudentAcademicProfile"> | string | null
+}
+
+export type StudentAcademicProfileCreateWithoutDepartmentInput = {
+  id?: string
+  year: number
+  semester: number
+  division?: string | null
+  institute: Prisma.InstituteCreateNestedOneWithoutStudentProfilesInput
+  student: Prisma.UserCreateNestedOneWithoutStudentProfileInput
+}
+
+export type StudentAcademicProfileUncheckedCreateWithoutDepartmentInput = {
+  id?: string
+  instituteId: string
+  studentId: string
+  year: number
+  semester: number
+  division?: string | null
+}
+
+export type StudentAcademicProfileCreateOrConnectWithoutDepartmentInput = {
+  where: Prisma.StudentAcademicProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.StudentAcademicProfileCreateWithoutDepartmentInput, Prisma.StudentAcademicProfileUncheckedCreateWithoutDepartmentInput>
+}
+
+export type StudentAcademicProfileCreateManyDepartmentInputEnvelope = {
+  data: Prisma.StudentAcademicProfileCreateManyDepartmentInput | Prisma.StudentAcademicProfileCreateManyDepartmentInput[]
+  skipDuplicates?: boolean
+}
+
+export type StudentAcademicProfileUpsertWithWhereUniqueWithoutDepartmentInput = {
+  where: Prisma.StudentAcademicProfileWhereUniqueInput
+  update: Prisma.XOR<Prisma.StudentAcademicProfileUpdateWithoutDepartmentInput, Prisma.StudentAcademicProfileUncheckedUpdateWithoutDepartmentInput>
+  create: Prisma.XOR<Prisma.StudentAcademicProfileCreateWithoutDepartmentInput, Prisma.StudentAcademicProfileUncheckedCreateWithoutDepartmentInput>
+}
+
+export type StudentAcademicProfileUpdateWithWhereUniqueWithoutDepartmentInput = {
+  where: Prisma.StudentAcademicProfileWhereUniqueInput
+  data: Prisma.XOR<Prisma.StudentAcademicProfileUpdateWithoutDepartmentInput, Prisma.StudentAcademicProfileUncheckedUpdateWithoutDepartmentInput>
+}
+
+export type StudentAcademicProfileUpdateManyWithWhereWithoutDepartmentInput = {
+  where: Prisma.StudentAcademicProfileScalarWhereInput
+  data: Prisma.XOR<Prisma.StudentAcademicProfileUpdateManyMutationInput, Prisma.StudentAcademicProfileUncheckedUpdateManyWithoutDepartmentInput>
 }
 
 export type StudentAcademicProfileCreateWithoutStudentInput = {
@@ -538,11 +651,13 @@ export type StudentAcademicProfileCreateWithoutStudentInput = {
   semester: number
   division?: string | null
   institute: Prisma.InstituteCreateNestedOneWithoutStudentProfilesInput
+  department: Prisma.DepartmentCreateNestedOneWithoutStudentProfilesInput
 }
 
 export type StudentAcademicProfileUncheckedCreateWithoutStudentInput = {
   id?: string
   instituteId: string
+  departmentId: string
   year: number
   semester: number
   division?: string | null
@@ -570,11 +685,13 @@ export type StudentAcademicProfileUpdateWithoutStudentInput = {
   semester?: Prisma.IntFieldUpdateOperationsInput | number
   division?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   institute?: Prisma.InstituteUpdateOneRequiredWithoutStudentProfilesNestedInput
+  department?: Prisma.DepartmentUpdateOneRequiredWithoutStudentProfilesNestedInput
 }
 
 export type StudentAcademicProfileUncheckedUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   instituteId?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
   semester?: Prisma.IntFieldUpdateOperationsInput | number
   division?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -583,6 +700,7 @@ export type StudentAcademicProfileUncheckedUpdateWithoutStudentInput = {
 export type StudentAcademicProfileCreateManyInstituteInput = {
   id?: string
   studentId: string
+  departmentId: string
   year: number
   semester: number
   division?: string | null
@@ -594,11 +712,13 @@ export type StudentAcademicProfileUpdateWithoutInstituteInput = {
   semester?: Prisma.IntFieldUpdateOperationsInput | number
   division?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   student?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
+  department?: Prisma.DepartmentUpdateOneRequiredWithoutStudentProfilesNestedInput
 }
 
 export type StudentAcademicProfileUncheckedUpdateWithoutInstituteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
   semester?: Prisma.IntFieldUpdateOperationsInput | number
   division?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -606,6 +726,43 @@ export type StudentAcademicProfileUncheckedUpdateWithoutInstituteInput = {
 
 export type StudentAcademicProfileUncheckedUpdateManyWithoutInstituteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  year?: Prisma.IntFieldUpdateOperationsInput | number
+  semester?: Prisma.IntFieldUpdateOperationsInput | number
+  division?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type StudentAcademicProfileCreateManyDepartmentInput = {
+  id?: string
+  instituteId: string
+  studentId: string
+  year: number
+  semester: number
+  division?: string | null
+}
+
+export type StudentAcademicProfileUpdateWithoutDepartmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  year?: Prisma.IntFieldUpdateOperationsInput | number
+  semester?: Prisma.IntFieldUpdateOperationsInput | number
+  division?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  institute?: Prisma.InstituteUpdateOneRequiredWithoutStudentProfilesNestedInput
+  student?: Prisma.UserUpdateOneRequiredWithoutStudentProfileNestedInput
+}
+
+export type StudentAcademicProfileUncheckedUpdateWithoutDepartmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  instituteId?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  year?: Prisma.IntFieldUpdateOperationsInput | number
+  semester?: Prisma.IntFieldUpdateOperationsInput | number
+  division?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type StudentAcademicProfileUncheckedUpdateManyWithoutDepartmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  instituteId?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
   semester?: Prisma.IntFieldUpdateOperationsInput | number
@@ -618,56 +775,66 @@ export type StudentAcademicProfileSelect<ExtArgs extends runtime.Types.Extension
   id?: boolean
   instituteId?: boolean
   studentId?: boolean
+  departmentId?: boolean
   year?: boolean
   semester?: boolean
   division?: boolean
   institute?: boolean | Prisma.InstituteDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["studentAcademicProfile"]>
 
 export type StudentAcademicProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   instituteId?: boolean
   studentId?: boolean
+  departmentId?: boolean
   year?: boolean
   semester?: boolean
   division?: boolean
   institute?: boolean | Prisma.InstituteDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["studentAcademicProfile"]>
 
 export type StudentAcademicProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   instituteId?: boolean
   studentId?: boolean
+  departmentId?: boolean
   year?: boolean
   semester?: boolean
   division?: boolean
   institute?: boolean | Prisma.InstituteDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["studentAcademicProfile"]>
 
 export type StudentAcademicProfileSelectScalar = {
   id?: boolean
   instituteId?: boolean
   studentId?: boolean
+  departmentId?: boolean
   year?: boolean
   semester?: boolean
   division?: boolean
 }
 
-export type StudentAcademicProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "instituteId" | "studentId" | "year" | "semester" | "division", ExtArgs["result"]["studentAcademicProfile"]>
+export type StudentAcademicProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "instituteId" | "studentId" | "departmentId" | "year" | "semester" | "division", ExtArgs["result"]["studentAcademicProfile"]>
 export type StudentAcademicProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   institute?: boolean | Prisma.InstituteDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }
 export type StudentAcademicProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   institute?: boolean | Prisma.InstituteDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }
 export type StudentAcademicProfileIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   institute?: boolean | Prisma.InstituteDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }
 
 export type $StudentAcademicProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -675,11 +842,13 @@ export type $StudentAcademicProfilePayload<ExtArgs extends runtime.Types.Extensi
   objects: {
     institute: Prisma.$InstitutePayload<ExtArgs>
     student: Prisma.$UserPayload<ExtArgs>
+    department: Prisma.$DepartmentPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     instituteId: string
     studentId: string
+    departmentId: string
     year: number
     semester: number
     division: string | null
@@ -1079,6 +1248,7 @@ export interface Prisma__StudentAcademicProfileClient<T, Null = never, ExtArgs e
   readonly [Symbol.toStringTag]: "PrismaPromise"
   institute<T extends Prisma.InstituteDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InstituteDefaultArgs<ExtArgs>>): Prisma.Prisma__InstituteClient<runtime.Types.Result.GetResult<Prisma.$InstitutePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   student<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  department<T extends Prisma.DepartmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DepartmentDefaultArgs<ExtArgs>>): Prisma.Prisma__DepartmentClient<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1111,6 +1281,7 @@ export interface StudentAcademicProfileFieldRefs {
   readonly id: Prisma.FieldRef<"StudentAcademicProfile", 'String'>
   readonly instituteId: Prisma.FieldRef<"StudentAcademicProfile", 'String'>
   readonly studentId: Prisma.FieldRef<"StudentAcademicProfile", 'String'>
+  readonly departmentId: Prisma.FieldRef<"StudentAcademicProfile", 'String'>
   readonly year: Prisma.FieldRef<"StudentAcademicProfile", 'Int'>
   readonly semester: Prisma.FieldRef<"StudentAcademicProfile", 'Int'>
   readonly division: Prisma.FieldRef<"StudentAcademicProfile", 'String'>

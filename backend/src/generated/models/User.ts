@@ -29,10 +29,10 @@ export type UserMinAggregateOutputType = {
   instituteId: string | null
   name: string | null
   email: string | null
+  rollNumber: string | null
   phone: string | null
   passwordHash: string | null
   role: $Enums.Role | null
-  departmentId: string | null
   faceData: string | null
   rfidUid: string | null
   biometricTemplate: string | null
@@ -44,10 +44,10 @@ export type UserMaxAggregateOutputType = {
   instituteId: string | null
   name: string | null
   email: string | null
+  rollNumber: string | null
   phone: string | null
   passwordHash: string | null
   role: $Enums.Role | null
-  departmentId: string | null
   faceData: string | null
   rfidUid: string | null
   biometricTemplate: string | null
@@ -59,10 +59,10 @@ export type UserCountAggregateOutputType = {
   instituteId: number
   name: number
   email: number
+  rollNumber: number
   phone: number
   passwordHash: number
   role: number
-  departmentId: number
   faceData: number
   rfidUid: number
   biometricTemplate: number
@@ -76,10 +76,10 @@ export type UserMinAggregateInputType = {
   instituteId?: true
   name?: true
   email?: true
+  rollNumber?: true
   phone?: true
   passwordHash?: true
   role?: true
-  departmentId?: true
   faceData?: true
   rfidUid?: true
   biometricTemplate?: true
@@ -91,10 +91,10 @@ export type UserMaxAggregateInputType = {
   instituteId?: true
   name?: true
   email?: true
+  rollNumber?: true
   phone?: true
   passwordHash?: true
   role?: true
-  departmentId?: true
   faceData?: true
   rfidUid?: true
   biometricTemplate?: true
@@ -106,10 +106,10 @@ export type UserCountAggregateInputType = {
   instituteId?: true
   name?: true
   email?: true
+  rollNumber?: true
   phone?: true
   passwordHash?: true
   role?: true
-  departmentId?: true
   faceData?: true
   rfidUid?: true
   biometricTemplate?: true
@@ -194,10 +194,10 @@ export type UserGroupByOutputType = {
   instituteId: string
   name: string
   email: string
+  rollNumber: string | null
   phone: string | null
   passwordHash: string
   role: $Enums.Role
-  departmentId: string | null
   faceData: string | null
   rfidUid: string | null
   biometricTemplate: string | null
@@ -230,16 +230,15 @@ export type UserWhereInput = {
   instituteId?: Prisma.StringFilter<"User"> | string
   name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
+  rollNumber?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   passwordHash?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
-  departmentId?: Prisma.StringNullableFilter<"User"> | string | null
   faceData?: Prisma.StringNullableFilter<"User"> | string | null
   rfidUid?: Prisma.StringNullableFilter<"User"> | string | null
   biometricTemplate?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   institute?: Prisma.XOR<Prisma.InstituteScalarRelationFilter, Prisma.InstituteWhereInput>
-  department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
   studentProfile?: Prisma.XOR<Prisma.StudentAcademicProfileNullableScalarRelationFilter, Prisma.StudentAcademicProfileWhereInput> | null
   hodDepartment?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
   facultySubjects?: Prisma.FacultySubjectListRelationFilter
@@ -250,16 +249,15 @@ export type UserOrderByWithRelationInput = {
   instituteId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  rollNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   role?: Prisma.SortOrder
-  departmentId?: Prisma.SortOrderInput | Prisma.SortOrder
   faceData?: Prisma.SortOrderInput | Prisma.SortOrder
   rfidUid?: Prisma.SortOrderInput | Prisma.SortOrder
   biometricTemplate?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   institute?: Prisma.InstituteOrderByWithRelationInput
-  department?: Prisma.DepartmentOrderByWithRelationInput
   studentProfile?: Prisma.StudentAcademicProfileOrderByWithRelationInput
   hodDepartment?: Prisma.DepartmentOrderByWithRelationInput
   facultySubjects?: Prisma.FacultySubjectOrderByRelationAggregateInput
@@ -268,36 +266,36 @@ export type UserOrderByWithRelationInput = {
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   instituteId_email?: Prisma.UserInstituteIdEmailCompoundUniqueInput
+  instituteId_rollNumber?: Prisma.UserInstituteIdRollNumberCompoundUniqueInput
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   instituteId?: Prisma.StringFilter<"User"> | string
   name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
+  rollNumber?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   passwordHash?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
-  departmentId?: Prisma.StringNullableFilter<"User"> | string | null
   faceData?: Prisma.StringNullableFilter<"User"> | string | null
   rfidUid?: Prisma.StringNullableFilter<"User"> | string | null
   biometricTemplate?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   institute?: Prisma.XOR<Prisma.InstituteScalarRelationFilter, Prisma.InstituteWhereInput>
-  department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
   studentProfile?: Prisma.XOR<Prisma.StudentAcademicProfileNullableScalarRelationFilter, Prisma.StudentAcademicProfileWhereInput> | null
   hodDepartment?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
   facultySubjects?: Prisma.FacultySubjectListRelationFilter
-}, "id" | "instituteId_email">
+}, "id" | "instituteId_email" | "instituteId_rollNumber">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   instituteId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  rollNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   role?: Prisma.SortOrder
-  departmentId?: Prisma.SortOrderInput | Prisma.SortOrder
   faceData?: Prisma.SortOrderInput | Prisma.SortOrder
   rfidUid?: Prisma.SortOrderInput | Prisma.SortOrder
   biometricTemplate?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -315,10 +313,10 @@ export type UserScalarWhereWithAggregatesInput = {
   instituteId?: Prisma.StringWithAggregatesFilter<"User"> | string
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
+  rollNumber?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
-  departmentId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   faceData?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   rfidUid?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   biometricTemplate?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -329,6 +327,7 @@ export type UserCreateInput = {
   id?: string
   name: string
   email: string
+  rollNumber?: string | null
   phone?: string | null
   passwordHash: string
   role: $Enums.Role
@@ -337,7 +336,6 @@ export type UserCreateInput = {
   biometricTemplate?: string | null
   createdAt?: Date | string
   institute: Prisma.InstituteCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   studentProfile?: Prisma.StudentAcademicProfileCreateNestedOneWithoutStudentInput
   hodDepartment?: Prisma.DepartmentCreateNestedOneWithoutHodInput
   facultySubjects?: Prisma.FacultySubjectCreateNestedManyWithoutFacultyInput
@@ -348,10 +346,10 @@ export type UserUncheckedCreateInput = {
   instituteId: string
   name: string
   email: string
+  rollNumber?: string | null
   phone?: string | null
   passwordHash: string
   role: $Enums.Role
-  departmentId?: string | null
   faceData?: string | null
   rfidUid?: string | null
   biometricTemplate?: string | null
@@ -365,6 +363,7 @@ export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  rollNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -373,7 +372,6 @@ export type UserUpdateInput = {
   biometricTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   institute?: Prisma.InstituteUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   studentProfile?: Prisma.StudentAcademicProfileUpdateOneWithoutStudentNestedInput
   hodDepartment?: Prisma.DepartmentUpdateOneWithoutHodNestedInput
   facultySubjects?: Prisma.FacultySubjectUpdateManyWithoutFacultyNestedInput
@@ -384,10 +382,10 @@ export type UserUncheckedUpdateInput = {
   instituteId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  rollNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faceData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rfidUid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   biometricTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -402,10 +400,10 @@ export type UserCreateManyInput = {
   instituteId: string
   name: string
   email: string
+  rollNumber?: string | null
   phone?: string | null
   passwordHash: string
   role: $Enums.Role
-  departmentId?: string | null
   faceData?: string | null
   rfidUid?: string | null
   biometricTemplate?: string | null
@@ -416,6 +414,7 @@ export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  rollNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -430,10 +429,10 @@ export type UserUncheckedUpdateManyInput = {
   instituteId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  rollNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faceData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rfidUid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   biometricTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -460,15 +459,20 @@ export type UserInstituteIdEmailCompoundUniqueInput = {
   email: string
 }
 
+export type UserInstituteIdRollNumberCompoundUniqueInput = {
+  instituteId: string
+  rollNumber: string
+}
+
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   instituteId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  rollNumber?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   role?: Prisma.SortOrder
-  departmentId?: Prisma.SortOrder
   faceData?: Prisma.SortOrder
   rfidUid?: Prisma.SortOrder
   biometricTemplate?: Prisma.SortOrder
@@ -480,10 +484,10 @@ export type UserMaxOrderByAggregateInput = {
   instituteId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  rollNumber?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   role?: Prisma.SortOrder
-  departmentId?: Prisma.SortOrder
   faceData?: Prisma.SortOrder
   rfidUid?: Prisma.SortOrder
   biometricTemplate?: Prisma.SortOrder
@@ -495,10 +499,10 @@ export type UserMinOrderByAggregateInput = {
   instituteId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  rollNumber?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   role?: Prisma.SortOrder
-  departmentId?: Prisma.SortOrder
   faceData?: Prisma.SortOrder
   rfidUid?: Prisma.SortOrder
   biometricTemplate?: Prisma.SortOrder
@@ -558,20 +562,6 @@ export type UserCreateNestedOneWithoutHodDepartmentInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserCreateNestedManyWithoutDepartmentInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutDepartmentInput, Prisma.UserUncheckedCreateWithoutDepartmentInput> | Prisma.UserCreateWithoutDepartmentInput[] | Prisma.UserUncheckedCreateWithoutDepartmentInput[]
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDepartmentInput | Prisma.UserCreateOrConnectWithoutDepartmentInput[]
-  createMany?: Prisma.UserCreateManyDepartmentInputEnvelope
-  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-}
-
-export type UserUncheckedCreateNestedManyWithoutDepartmentInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutDepartmentInput, Prisma.UserUncheckedCreateWithoutDepartmentInput> | Prisma.UserCreateWithoutDepartmentInput[] | Prisma.UserUncheckedCreateWithoutDepartmentInput[]
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDepartmentInput | Prisma.UserCreateOrConnectWithoutDepartmentInput[]
-  createMany?: Prisma.UserCreateManyDepartmentInputEnvelope
-  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-}
-
 export type UserUpdateOneWithoutHodDepartmentNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutHodDepartmentInput, Prisma.UserUncheckedCreateWithoutHodDepartmentInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutHodDepartmentInput
@@ -580,34 +570,6 @@ export type UserUpdateOneWithoutHodDepartmentNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutHodDepartmentInput, Prisma.UserUpdateWithoutHodDepartmentInput>, Prisma.UserUncheckedUpdateWithoutHodDepartmentInput>
-}
-
-export type UserUpdateManyWithoutDepartmentNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutDepartmentInput, Prisma.UserUncheckedCreateWithoutDepartmentInput> | Prisma.UserCreateWithoutDepartmentInput[] | Prisma.UserUncheckedCreateWithoutDepartmentInput[]
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDepartmentInput | Prisma.UserCreateOrConnectWithoutDepartmentInput[]
-  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutDepartmentInput | Prisma.UserUpsertWithWhereUniqueWithoutDepartmentInput[]
-  createMany?: Prisma.UserCreateManyDepartmentInputEnvelope
-  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  update?: Prisma.UserUpdateWithWhereUniqueWithoutDepartmentInput | Prisma.UserUpdateWithWhereUniqueWithoutDepartmentInput[]
-  updateMany?: Prisma.UserUpdateManyWithWhereWithoutDepartmentInput | Prisma.UserUpdateManyWithWhereWithoutDepartmentInput[]
-  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
-}
-
-export type UserUncheckedUpdateManyWithoutDepartmentNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutDepartmentInput, Prisma.UserUncheckedCreateWithoutDepartmentInput> | Prisma.UserCreateWithoutDepartmentInput[] | Prisma.UserUncheckedCreateWithoutDepartmentInput[]
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDepartmentInput | Prisma.UserCreateOrConnectWithoutDepartmentInput[]
-  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutDepartmentInput | Prisma.UserUpsertWithWhereUniqueWithoutDepartmentInput[]
-  createMany?: Prisma.UserCreateManyDepartmentInputEnvelope
-  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  update?: Prisma.UserUpdateWithWhereUniqueWithoutDepartmentInput | Prisma.UserUpdateWithWhereUniqueWithoutDepartmentInput[]
-  updateMany?: Prisma.UserUpdateManyWithWhereWithoutDepartmentInput | Prisma.UserUpdateManyWithWhereWithoutDepartmentInput[]
-  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
 export type EnumRoleFieldUpdateOperationsInput = {
@@ -646,6 +608,7 @@ export type UserCreateWithoutInstituteInput = {
   id?: string
   name: string
   email: string
+  rollNumber?: string | null
   phone?: string | null
   passwordHash: string
   role: $Enums.Role
@@ -653,7 +616,6 @@ export type UserCreateWithoutInstituteInput = {
   rfidUid?: string | null
   biometricTemplate?: string | null
   createdAt?: Date | string
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   studentProfile?: Prisma.StudentAcademicProfileCreateNestedOneWithoutStudentInput
   hodDepartment?: Prisma.DepartmentCreateNestedOneWithoutHodInput
   facultySubjects?: Prisma.FacultySubjectCreateNestedManyWithoutFacultyInput
@@ -663,10 +625,10 @@ export type UserUncheckedCreateWithoutInstituteInput = {
   id?: string
   name: string
   email: string
+  rollNumber?: string | null
   phone?: string | null
   passwordHash: string
   role: $Enums.Role
-  departmentId?: string | null
   faceData?: string | null
   rfidUid?: string | null
   biometricTemplate?: string | null
@@ -710,10 +672,10 @@ export type UserScalarWhereInput = {
   instituteId?: Prisma.StringFilter<"User"> | string
   name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
+  rollNumber?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   passwordHash?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
-  departmentId?: Prisma.StringNullableFilter<"User"> | string | null
   faceData?: Prisma.StringNullableFilter<"User"> | string | null
   rfidUid?: Prisma.StringNullableFilter<"User"> | string | null
   biometricTemplate?: Prisma.StringNullableFilter<"User"> | string | null
@@ -724,6 +686,7 @@ export type UserCreateWithoutHodDepartmentInput = {
   id?: string
   name: string
   email: string
+  rollNumber?: string | null
   phone?: string | null
   passwordHash: string
   role: $Enums.Role
@@ -732,7 +695,6 @@ export type UserCreateWithoutHodDepartmentInput = {
   biometricTemplate?: string | null
   createdAt?: Date | string
   institute: Prisma.InstituteCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   studentProfile?: Prisma.StudentAcademicProfileCreateNestedOneWithoutStudentInput
   facultySubjects?: Prisma.FacultySubjectCreateNestedManyWithoutFacultyInput
 }
@@ -742,10 +704,10 @@ export type UserUncheckedCreateWithoutHodDepartmentInput = {
   instituteId: string
   name: string
   email: string
+  rollNumber?: string | null
   phone?: string | null
   passwordHash: string
   role: $Enums.Role
-  departmentId?: string | null
   faceData?: string | null
   rfidUid?: string | null
   biometricTemplate?: string | null
@@ -757,50 +719,6 @@ export type UserUncheckedCreateWithoutHodDepartmentInput = {
 export type UserCreateOrConnectWithoutHodDepartmentInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutHodDepartmentInput, Prisma.UserUncheckedCreateWithoutHodDepartmentInput>
-}
-
-export type UserCreateWithoutDepartmentInput = {
-  id?: string
-  name: string
-  email: string
-  phone?: string | null
-  passwordHash: string
-  role: $Enums.Role
-  faceData?: string | null
-  rfidUid?: string | null
-  biometricTemplate?: string | null
-  createdAt?: Date | string
-  institute: Prisma.InstituteCreateNestedOneWithoutUsersInput
-  studentProfile?: Prisma.StudentAcademicProfileCreateNestedOneWithoutStudentInput
-  hodDepartment?: Prisma.DepartmentCreateNestedOneWithoutHodInput
-  facultySubjects?: Prisma.FacultySubjectCreateNestedManyWithoutFacultyInput
-}
-
-export type UserUncheckedCreateWithoutDepartmentInput = {
-  id?: string
-  instituteId: string
-  name: string
-  email: string
-  phone?: string | null
-  passwordHash: string
-  role: $Enums.Role
-  faceData?: string | null
-  rfidUid?: string | null
-  biometricTemplate?: string | null
-  createdAt?: Date | string
-  studentProfile?: Prisma.StudentAcademicProfileUncheckedCreateNestedOneWithoutStudentInput
-  hodDepartment?: Prisma.DepartmentUncheckedCreateNestedOneWithoutHodInput
-  facultySubjects?: Prisma.FacultySubjectUncheckedCreateNestedManyWithoutFacultyInput
-}
-
-export type UserCreateOrConnectWithoutDepartmentInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutDepartmentInput, Prisma.UserUncheckedCreateWithoutDepartmentInput>
-}
-
-export type UserCreateManyDepartmentInputEnvelope = {
-  data: Prisma.UserCreateManyDepartmentInput | Prisma.UserCreateManyDepartmentInput[]
-  skipDuplicates?: boolean
 }
 
 export type UserUpsertWithoutHodDepartmentInput = {
@@ -818,6 +736,7 @@ export type UserUpdateWithoutHodDepartmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  rollNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -826,7 +745,6 @@ export type UserUpdateWithoutHodDepartmentInput = {
   biometricTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   institute?: Prisma.InstituteUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   studentProfile?: Prisma.StudentAcademicProfileUpdateOneWithoutStudentNestedInput
   facultySubjects?: Prisma.FacultySubjectUpdateManyWithoutFacultyNestedInput
 }
@@ -836,10 +754,10 @@ export type UserUncheckedUpdateWithoutHodDepartmentInput = {
   instituteId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  rollNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faceData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rfidUid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   biometricTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -848,26 +766,11 @@ export type UserUncheckedUpdateWithoutHodDepartmentInput = {
   facultySubjects?: Prisma.FacultySubjectUncheckedUpdateManyWithoutFacultyNestedInput
 }
 
-export type UserUpsertWithWhereUniqueWithoutDepartmentInput = {
-  where: Prisma.UserWhereUniqueInput
-  update: Prisma.XOR<Prisma.UserUpdateWithoutDepartmentInput, Prisma.UserUncheckedUpdateWithoutDepartmentInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutDepartmentInput, Prisma.UserUncheckedCreateWithoutDepartmentInput>
-}
-
-export type UserUpdateWithWhereUniqueWithoutDepartmentInput = {
-  where: Prisma.UserWhereUniqueInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutDepartmentInput, Prisma.UserUncheckedUpdateWithoutDepartmentInput>
-}
-
-export type UserUpdateManyWithWhereWithoutDepartmentInput = {
-  where: Prisma.UserScalarWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutDepartmentInput>
-}
-
 export type UserCreateWithoutStudentProfileInput = {
   id?: string
   name: string
   email: string
+  rollNumber?: string | null
   phone?: string | null
   passwordHash: string
   role: $Enums.Role
@@ -876,7 +779,6 @@ export type UserCreateWithoutStudentProfileInput = {
   biometricTemplate?: string | null
   createdAt?: Date | string
   institute: Prisma.InstituteCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   hodDepartment?: Prisma.DepartmentCreateNestedOneWithoutHodInput
   facultySubjects?: Prisma.FacultySubjectCreateNestedManyWithoutFacultyInput
 }
@@ -886,10 +788,10 @@ export type UserUncheckedCreateWithoutStudentProfileInput = {
   instituteId: string
   name: string
   email: string
+  rollNumber?: string | null
   phone?: string | null
   passwordHash: string
   role: $Enums.Role
-  departmentId?: string | null
   faceData?: string | null
   rfidUid?: string | null
   biometricTemplate?: string | null
@@ -918,6 +820,7 @@ export type UserUpdateWithoutStudentProfileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  rollNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -926,7 +829,6 @@ export type UserUpdateWithoutStudentProfileInput = {
   biometricTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   institute?: Prisma.InstituteUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   hodDepartment?: Prisma.DepartmentUpdateOneWithoutHodNestedInput
   facultySubjects?: Prisma.FacultySubjectUpdateManyWithoutFacultyNestedInput
 }
@@ -936,10 +838,10 @@ export type UserUncheckedUpdateWithoutStudentProfileInput = {
   instituteId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  rollNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faceData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rfidUid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   biometricTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -952,6 +854,7 @@ export type UserCreateWithoutFacultySubjectsInput = {
   id?: string
   name: string
   email: string
+  rollNumber?: string | null
   phone?: string | null
   passwordHash: string
   role: $Enums.Role
@@ -960,7 +863,6 @@ export type UserCreateWithoutFacultySubjectsInput = {
   biometricTemplate?: string | null
   createdAt?: Date | string
   institute: Prisma.InstituteCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   studentProfile?: Prisma.StudentAcademicProfileCreateNestedOneWithoutStudentInput
   hodDepartment?: Prisma.DepartmentCreateNestedOneWithoutHodInput
 }
@@ -970,10 +872,10 @@ export type UserUncheckedCreateWithoutFacultySubjectsInput = {
   instituteId: string
   name: string
   email: string
+  rollNumber?: string | null
   phone?: string | null
   passwordHash: string
   role: $Enums.Role
-  departmentId?: string | null
   faceData?: string | null
   rfidUid?: string | null
   biometricTemplate?: string | null
@@ -1002,6 +904,7 @@ export type UserUpdateWithoutFacultySubjectsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  rollNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -1010,7 +913,6 @@ export type UserUpdateWithoutFacultySubjectsInput = {
   biometricTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   institute?: Prisma.InstituteUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   studentProfile?: Prisma.StudentAcademicProfileUpdateOneWithoutStudentNestedInput
   hodDepartment?: Prisma.DepartmentUpdateOneWithoutHodNestedInput
 }
@@ -1020,10 +922,10 @@ export type UserUncheckedUpdateWithoutFacultySubjectsInput = {
   instituteId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  rollNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faceData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rfidUid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   biometricTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1036,10 +938,10 @@ export type UserCreateManyInstituteInput = {
   id?: string
   name: string
   email: string
+  rollNumber?: string | null
   phone?: string | null
   passwordHash: string
   role: $Enums.Role
-  departmentId?: string | null
   faceData?: string | null
   rfidUid?: string | null
   biometricTemplate?: string | null
@@ -1050,6 +952,7 @@ export type UserUpdateWithoutInstituteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  rollNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -1057,7 +960,6 @@ export type UserUpdateWithoutInstituteInput = {
   rfidUid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   biometricTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   studentProfile?: Prisma.StudentAcademicProfileUpdateOneWithoutStudentNestedInput
   hodDepartment?: Prisma.DepartmentUpdateOneWithoutHodNestedInput
   facultySubjects?: Prisma.FacultySubjectUpdateManyWithoutFacultyNestedInput
@@ -1067,10 +969,10 @@ export type UserUncheckedUpdateWithoutInstituteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  rollNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faceData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rfidUid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   biometricTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1084,69 +986,7 @@ export type UserUncheckedUpdateManyWithoutInstituteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  faceData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rfidUid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  biometricTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type UserCreateManyDepartmentInput = {
-  id?: string
-  instituteId: string
-  name: string
-  email: string
-  phone?: string | null
-  passwordHash: string
-  role: $Enums.Role
-  faceData?: string | null
-  rfidUid?: string | null
-  biometricTemplate?: string | null
-  createdAt?: Date | string
-}
-
-export type UserUpdateWithoutDepartmentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  faceData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rfidUid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  biometricTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  institute?: Prisma.InstituteUpdateOneRequiredWithoutUsersNestedInput
-  studentProfile?: Prisma.StudentAcademicProfileUpdateOneWithoutStudentNestedInput
-  hodDepartment?: Prisma.DepartmentUpdateOneWithoutHodNestedInput
-  facultySubjects?: Prisma.FacultySubjectUpdateManyWithoutFacultyNestedInput
-}
-
-export type UserUncheckedUpdateWithoutDepartmentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  instituteId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  faceData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rfidUid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  biometricTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  studentProfile?: Prisma.StudentAcademicProfileUncheckedUpdateOneWithoutStudentNestedInput
-  hodDepartment?: Prisma.DepartmentUncheckedUpdateOneWithoutHodNestedInput
-  facultySubjects?: Prisma.FacultySubjectUncheckedUpdateManyWithoutFacultyNestedInput
-}
-
-export type UserUncheckedUpdateManyWithoutDepartmentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  instituteId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  rollNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -1192,16 +1032,15 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   instituteId?: boolean
   name?: boolean
   email?: boolean
+  rollNumber?: boolean
   phone?: boolean
   passwordHash?: boolean
   role?: boolean
-  departmentId?: boolean
   faceData?: boolean
   rfidUid?: boolean
   biometricTemplate?: boolean
   createdAt?: boolean
   institute?: boolean | Prisma.InstituteDefaultArgs<ExtArgs>
-  department?: boolean | Prisma.User$departmentArgs<ExtArgs>
   studentProfile?: boolean | Prisma.User$studentProfileArgs<ExtArgs>
   hodDepartment?: boolean | Prisma.User$hodDepartmentArgs<ExtArgs>
   facultySubjects?: boolean | Prisma.User$facultySubjectsArgs<ExtArgs>
@@ -1213,16 +1052,15 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   instituteId?: boolean
   name?: boolean
   email?: boolean
+  rollNumber?: boolean
   phone?: boolean
   passwordHash?: boolean
   role?: boolean
-  departmentId?: boolean
   faceData?: boolean
   rfidUid?: boolean
   biometricTemplate?: boolean
   createdAt?: boolean
   institute?: boolean | Prisma.InstituteDefaultArgs<ExtArgs>
-  department?: boolean | Prisma.User$departmentArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1230,16 +1068,15 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   instituteId?: boolean
   name?: boolean
   email?: boolean
+  rollNumber?: boolean
   phone?: boolean
   passwordHash?: boolean
   role?: boolean
-  departmentId?: boolean
   faceData?: boolean
   rfidUid?: boolean
   biometricTemplate?: boolean
   createdAt?: boolean
   institute?: boolean | Prisma.InstituteDefaultArgs<ExtArgs>
-  department?: boolean | Prisma.User$departmentArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -1247,20 +1084,19 @@ export type UserSelectScalar = {
   instituteId?: boolean
   name?: boolean
   email?: boolean
+  rollNumber?: boolean
   phone?: boolean
   passwordHash?: boolean
   role?: boolean
-  departmentId?: boolean
   faceData?: boolean
   rfidUid?: boolean
   biometricTemplate?: boolean
   createdAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "instituteId" | "name" | "email" | "phone" | "passwordHash" | "role" | "departmentId" | "faceData" | "rfidUid" | "biometricTemplate" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "instituteId" | "name" | "email" | "rollNumber" | "phone" | "passwordHash" | "role" | "faceData" | "rfidUid" | "biometricTemplate" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   institute?: boolean | Prisma.InstituteDefaultArgs<ExtArgs>
-  department?: boolean | Prisma.User$departmentArgs<ExtArgs>
   studentProfile?: boolean | Prisma.User$studentProfileArgs<ExtArgs>
   hodDepartment?: boolean | Prisma.User$hodDepartmentArgs<ExtArgs>
   facultySubjects?: boolean | Prisma.User$facultySubjectsArgs<ExtArgs>
@@ -1268,18 +1104,15 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   institute?: boolean | Prisma.InstituteDefaultArgs<ExtArgs>
-  department?: boolean | Prisma.User$departmentArgs<ExtArgs>
 }
 export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   institute?: boolean | Prisma.InstituteDefaultArgs<ExtArgs>
-  department?: boolean | Prisma.User$departmentArgs<ExtArgs>
 }
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
     institute: Prisma.$InstitutePayload<ExtArgs>
-    department: Prisma.$DepartmentPayload<ExtArgs> | null
     studentProfile: Prisma.$StudentAcademicProfilePayload<ExtArgs> | null
     hodDepartment: Prisma.$DepartmentPayload<ExtArgs> | null
     facultySubjects: Prisma.$FacultySubjectPayload<ExtArgs>[]
@@ -1289,10 +1122,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     instituteId: string
     name: string
     email: string
+    rollNumber: string | null
     phone: string | null
     passwordHash: string
     role: $Enums.Role
-    departmentId: string | null
     faceData: string | null
     rfidUid: string | null
     biometricTemplate: string | null
@@ -1692,7 +1525,6 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   institute<T extends Prisma.InstituteDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InstituteDefaultArgs<ExtArgs>>): Prisma.Prisma__InstituteClient<runtime.Types.Result.GetResult<Prisma.$InstitutePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  department<T extends Prisma.User$departmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$departmentArgs<ExtArgs>>): Prisma.Prisma__DepartmentClient<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   studentProfile<T extends Prisma.User$studentProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$studentProfileArgs<ExtArgs>>): Prisma.Prisma__StudentAcademicProfileClient<runtime.Types.Result.GetResult<Prisma.$StudentAcademicProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   hodDepartment<T extends Prisma.User$hodDepartmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$hodDepartmentArgs<ExtArgs>>): Prisma.Prisma__DepartmentClient<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   facultySubjects<T extends Prisma.User$facultySubjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$facultySubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FacultySubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1729,10 +1561,10 @@ export interface UserFieldRefs {
   readonly instituteId: Prisma.FieldRef<"User", 'String'>
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
+  readonly rollNumber: Prisma.FieldRef<"User", 'String'>
   readonly phone: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
-  readonly departmentId: Prisma.FieldRef<"User", 'String'>
   readonly faceData: Prisma.FieldRef<"User", 'String'>
   readonly rfidUid: Prisma.FieldRef<"User", 'String'>
   readonly biometricTemplate: Prisma.FieldRef<"User", 'String'>
@@ -2130,25 +1962,6 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
-}
-
-/**
- * User.department
- */
-export type User$departmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Department
-   */
-  select?: Prisma.DepartmentSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Department
-   */
-  omit?: Prisma.DepartmentOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DepartmentInclude<ExtArgs> | null
-  where?: Prisma.DepartmentWhereInput
 }
 
 /**

@@ -6,7 +6,6 @@ import { Users, GraduationCap, Building2, TrendingUp, Bell, Plus, UserPlus } fro
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
 import { useEnrollmentStore } from "@/lib/enrollmentStore";
-import { useAuthStore } from "@/lib/useAuthStore";
 
 const stats = [
   {
@@ -60,66 +59,52 @@ const recentAnnouncements = [
   },
 ];
 
-const departments = [
-  { name: "Computer Science", hod: "Dr. Sarah Johnson", faculty: 24, students: 456 },
-  { name: "Mechanical Engineering", hod: "Prof. Michael Chen", faculty: 18, students: 387 },
-  { name: "Electrical Engineering", hod: "Dr. Robert Smith", faculty: 21, students: 412 },
-  { name: "Civil Engineering", hod: "Prof. Emily Davis", faculty: 16, students: 298 },
-];
-
 const AdminDashboard = () => {
-  const [showForm, setShowForm] = useState(true)
-  const [name, setName] = useState('')
-  const [code, setCode] = useState('')
-  const enrollment = useEnrollmentStore()
-  const user = useAuthStore((s) => s.user)
+  const [showCreateDeptForm, setShowCreateDeptForm] = useState(false);
+  const [departmentName, setDepartmentName] = useState('');
+  const [departmentCode, setDepartmentCode] = useState('');
+  const [hodName, setHodName] = useState('');
+  const [hodEmail, setHodEmail] = useState('');
+  const [hodPassword, setHodPassword] = useState('');
+  const enrollment = useEnrollmentStore();
 
   useEffect(() => {
-    if (!enrollment.loading) enrollment.loadAll()
-  }, [])
+    if (!enrollment.loading) enrollment.loadAll();
+  }, []);
 
-  const handleCreate = async () => {
+  const handleCreateDepartmentAndHod = async () => {
     try {
-      await enrollment.createDepartment({ name, code })
-      setName('')
-      setCode('')
-      setShowForm(false)
+      const dept = await enrollment.createDepartment({ name: departmentName, code: departmentCode });
+      await enrollment.createHod({ name: hodName, email: hodEmail, password: hodPassword, departmentId: dept.id });
+      // Reset form and hide
+      setDepartmentName('');
+      setDepartmentCode('');
+      setHodName('');
+      setHodEmail('');
+      setHodPassword('');
+      setShowCreateDeptForm(false);
     } catch (err: any) {
-      alert(err.message || 'Failed')
+      alert(err.message || 'Failed');
     }
-  }
+  };
 
   return (
     <Layout>
       <div className="space-y-8">
-        {/* Header */}
         <div className="bg-gradient-hero p-8 rounded-2xl text-primary-foreground shadow-elevated">
           <div className="max-w-4xl">
             <h1 className="text-3xl font-bold mb-2">Institute Admin Dashboard</h1>
             <p className="text-primary-foreground/90 text-lg">Manage your institution efficiently</p>
-            <div className="flex items-center space-x-4 mt-4">
-              <Button variant="secondary" size="sm" className="gap-2">
-                <UserPlus className="h-4 w-4" />
-                Add Faculty
-              </Button>
-              <Button variant="secondary" size="sm" className="gap-2">
-                <Plus className="h-4 w-4" />
-                New Announcement
-              </Button>
-            </div>
           </div>
         </div>
 
-        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
             <StatCard key={index} {...stat} />
           ))}
         </div>
 
-        {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Departments Overview */}
           <div className="lg:col-span-2">
             <Card className="shadow-card">
               <CardHeader className="flex flex-row items-center justify-between">
@@ -127,47 +112,54 @@ const AdminDashboard = () => {
                   <Building2 className="h-5 w-5 text-primary" />
                   <span>Departments Overview</span>
                 </CardTitle>
-                <Button variant="outline" size="sm">Manage All</Button>
+                <Button variant="outline" size="sm" onClick={() => setShowCreateDeptForm(true)}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  New Department
+                </Button>
               </CardHeader>
               <CardContent className="space-y-4">
+                {showCreateDeptForm && (
+                  <div className="p-4 rounded-lg border border-border bg-muted/50">
+                    <h4 className="font-semibold text-lg mb-4">Enroll New Department & HOD</h4>
+                    <div className="space-y-4">
+                      <input className="w-full p-2 border rounded" placeholder="Department Name" value={departmentName} onChange={(e) => setDepartmentName(e.target.value)} />
+                      <input className="w-full p-2 border rounded" placeholder="Department Code" value={departmentCode} onChange={(e) => setDepartmentCode(e.target.value)} />
+                      <input className="w-full p-2 border rounded" placeholder="HOD Name" value={hodName} onChange={(e) => setHodName(e.target.value)} />
+                      <input className="w-full p-2 border rounded" placeholder="HOD Email" value={hodEmail} onChange={(e) => setHodEmail(e.target.value)} />
+                      <input className="w-full p-2 border rounded" placeholder="HOD Password" type="password" value={hodPassword} onChange={(e) => setHodPassword(e.target.value)} />
+                      <div className="flex gap-2">
+                        <Button onClick={handleCreateDepartmentAndHod}>Create</Button>
+                        <Button variant="ghost" onClick={() => setShowCreateDeptForm(false)}>Cancel</Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {enrollment.departments.map((dept: any, index: number) => (
                   <div key={index} className="p-4 rounded-lg border border-border hover:bg-muted/50 transition-colors">
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <h4 className="font-semibold text-foreground">{dept.name}</h4>
-                        <p className="text-sm text-muted-foreground">HOD: {dept.hod}</p>
+                        <p className="text-sm text-muted-foreground">HOD: {dept.hod?.name || 'N/A'}</p>
                       </div>
                       <Button variant="ghost" size="sm">Edit</Button>
                     </div>
                     <div className="flex gap-4 text-sm">
                       <div className="flex items-center gap-2">
                         <Users className="h-4 w-4 text-muted-foreground" />
-                        <span>{dept.faculty} Faculty</span>
+                        <span>{dept.faculty?.length || 0} Faculty</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <GraduationCap className="h-4 w-4 text-muted-foreground" />
-                        <span>{dept.students} Students</span>
+                        <span>{dept.students?.length || 0} Students</span>
                       </div>
                     </div>
                   </div>
                 ))}
-                {showForm && (
-                  <div className="p-4 rounded-lg border border-border">
-                    <div className="space-y-2">
-                      <input className="w-full p-2 border rounded" placeholder="Department name" value={name} onChange={(e) => setName(e.target.value)} />
-                      <input className="w-full p-2 border rounded" placeholder="Department code" value={code} onChange={(e) => setCode(e.target.value)} />
-                      <div className="flex gap-2">
-                        <Button onClick={handleCreate}>Create</Button>
-                        <Button variant="ghost" onClick={() => setShowForm(false)}>Cancel</Button>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </CardContent>
             </Card>
           </div>
 
-          {/* Recent Announcements */}
           <div>
             <Card className="shadow-card">
               <CardHeader>
