@@ -3,8 +3,10 @@ dotenv.config()
 
 import express from 'express'
 import cors from 'cors'
-import { prisma } from './db/client'
+
+import { prisma }  from "./db/client"
 import morgan from "morgan"
+
 
 
 const app = express()
@@ -32,6 +34,7 @@ import enrollmentRouter from './routes/enrollment'
 import authRouter from './routes/auth'
 import adminRouter from './routes/admin'
 import hodRouter from './routes/hod'
+
 
 app.use('/api/enrollment', enrollmentRouter)
 app.use('/api/auth', authRouter)

@@ -1,12 +1,13 @@
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authMiddleware } from '../middleware/auth';
+import{ prisma } from '../db/client'
 
-const prisma = new PrismaClient();
+//onst prisma = new PrismaClient();
 const router = Router();
 
 router.get('/dashboard', authMiddleware, async (req, res) => {
-  const user = req.user as any;
+  const user = req?.user as any;
 
   if (user.role !== 'HOD') {
     return res.status(403).json({ message: 'Forbidden' });
