@@ -7,7 +7,7 @@ const router = express.Router()
 router.get('/hods', async (req, res) => {
   const hods = await prisma.user.findMany({
     where: { role: 'HOD' },
-    include: { department: true },
+    include: { hodDepartment: true },
   })
   res.json(hods)
 })

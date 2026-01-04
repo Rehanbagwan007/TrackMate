@@ -19,6 +19,7 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
       include: {
         members: true,
         faculty: true,
+        students: true,
       },
     });
 

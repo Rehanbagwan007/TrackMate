@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 
 const router = express.Router()
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret'
-const INSTITUTE_CODE = 'EX-001'
+const INSTITUTE_CODE = 'EX-001' as InstituteWhereUniqueInput["id"] 
 
 // login: { email, password }
 router.post('/login', async (req, res) => {
@@ -17,7 +17,7 @@ router.post('/login', async (req, res) => {
   if (!institute) return res.status(404).json({ error: 'institute not found' })
 
   // 2. Find the user by their email and institute
-  const user = await prisma.user.findUnique({ where: { email_instituteId: { email, instituteId: institute.id } } })
+  const user = await prisma.user.findUnique({ where: { instituteId_email: { email, instituteId: institute.id } } })
   if (!user) return res.status(401).json({ error: 'invalid credentials' })
 
   const match = await bcrypt.compare(password, user.passwordHash)
@@ -30,6 +30,7 @@ router.post('/login', async (req, res) => {
 
 // me
 import { authMiddleware } from '../middleware/auth'
+import { InstituteWhereUniqueInput } from '../generated/models'
 router.get('/me', authMiddleware, async (req, res) => {
   const user = (req as any).user
   const dbUser = await prisma.user.findUnique({ where: { id: user.id }, include: { department: true } })
