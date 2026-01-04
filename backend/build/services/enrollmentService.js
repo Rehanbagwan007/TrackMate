@@ -17,7 +17,7 @@ const supabaseClient_1 = require("../lib/supabaseClient");
 async function createDepartment(actor, data) {
     if (actor.role !== 'INSTITUTE_ADMIN')
         throw new Error('Forbidden');
-    // Ensure scoping by instituteId
+    // This uses the @@unique([name, instituteId]) constraint
     const dept = await client_1.prisma.department.upsert({
         where: {
             name_instituteId: {
@@ -29,6 +29,7 @@ async function createDepartment(actor, data) {
         create: {
             instituteId: actor.instituteId,
             name: data.name,
+            code: data.code,
         },
     });
     return dept;
@@ -51,10 +52,10 @@ async function createHod(actor, data) {
             email: data.email,
             passwordHash,
             role: 'HOD',
-            departmentId: dept.id,
+            departmentId: dept.id, // FIX: Assign HOD to the department as a member
         },
     });
-    // set department.hodId
+    // set department.hodId to establish the 1-to-1 HOD relation
     await client_1.prisma.department.update({ where: { id: dept.id }, data: { hodId: hod.id } });
     return hod;
 }
@@ -64,12 +65,20 @@ async function createHod(actor, data) {
 async function createFaculty(actor, data) {
     if (actor.role !== 'HOD')
         throw new Error('Forbidden');
-    // Ensure actor has a department
-    const hodUser = await client_1.prisma.user.findUnique({ where: { id: actor.id }, include: { department: true } });
-    if (!hodUser?.departmentId)
-        throw new Error('HOD not assigned to a department');
+    // FIX: Make finding the HOD's department robust
+    const hodUser = await client_1.prisma.user.findUnique({ where: { id: actor.id } });
+    if (!hodUser)
+        throw new Error('HOD user not found');
     if (hodUser.instituteId !== actor.instituteId)
         throw new Error('Cross-institute access denied');
+    let departmentId = hodUser.departmentId;
+    // Fallback: if departmentId is not on the user, find the department they are HOD of
+    if (!departmentId) {
+        const department = await client_1.prisma.department.findUnique({ where: { hodId: actor.id } });
+        if (!department)
+            throw new Error('HOD not assigned to any department');
+        departmentId = department.id;
+    }
     const passwordHash = await bcrypt_1.default.hash(data.password, 10);
     const faculty = await client_1.prisma.user.create({
         data: {
@@ -78,11 +87,11 @@ async function createFaculty(actor, data) {
             email: data.email,
             passwordHash,
             role: 'FACULTY',
-            departmentId: hodUser.departmentId,
+            departmentId: departmentId, // This is now reliable
         },
     });
     if (data.subjectSpecialization) {
-        await client_1.prisma.facultySubject.create({ data: { subject: data.subjectSpecialization, facultyId: faculty.id, departmentId: hodUser.departmentId } });
+        await client_1.prisma.facultySubject.create({ data: { subject: data.subjectSpecialization, facultyId: faculty.id, departmentId: departmentId } });
     }
     return faculty;
 }
@@ -104,6 +113,7 @@ async function enrollStudent(actor, data) {
             email: data.email,
             passwordHash,
             role: 'STUDENT',
+            // FIX: Correctly convert base64 string to Buffer for Prisma
             faceData: data.faceData ? Buffer.from(data.faceData, 'base64') : null,
             rfidUid: data.rfidUid ?? null,
             biometricTemplate: data.biometricTemplate ? Buffer.from(data.biometricTemplate, 'base64') : null,
@@ -117,6 +127,7 @@ async function enrollStudent(actor, data) {
             year: data.year,
             semester: data.semester,
             division: data.division,
+            // FIX: Schema field is `rollNo`, but incoming data field is `rollNumber`
             rollNo: data.rollNumber,
         },
     });

@@ -107,7 +107,7 @@ export async function enrollStudent(actor: Actor, data: { name: string; rollNumb
       email: data.email,
       passwordHash,
       role: 'STUDENT',
-      faceData: data.faceData ? Buffer.from(data.faceData, 'base64') : null,
+      faceData: data.faceData ? Buffer.from(data.faceData, 'base64') : null ,
       rfidUid: data.rfidUid ?? null,
       biometricTemplate: data.biometricTemplate ? Buffer.from(data.biometricTemplate, 'base64') : null,
     },

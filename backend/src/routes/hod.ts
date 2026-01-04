@@ -1,13 +1,15 @@
-import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { Router, Request } from 'express';
 import { authMiddleware } from '../middleware/auth';
-import{ prisma } from '../db/client'
+import { prisma } from '../db/client';
 
-//onst prisma = new PrismaClient();
 const router = Router();
 
-router.get('/dashboard', authMiddleware, async (req, res) => {
-  const user = req?.user as any;
+interface AuthRequest extends Request {
+  user?: any;
+}
+
+router.get('/dashboard', authMiddleware, async (req: AuthRequest, res) => {
+  const user = req.user;
 
   if (user.role !== 'HOD') {
     return res.status(403).json({ message: 'Forbidden' });
@@ -17,8 +19,7 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
     const department = await prisma.department.findUnique({
       where: { hodId: user.id },
       include: {
-        members: true,
-        faculty: true,
+        members: true, // Correct: Include all department members
         students: true,
       },
     });
@@ -26,6 +27,9 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
     if (!department) {
       return res.status(404).json({ message: 'Department not found for this HOD' });
     }
+
+    // You can filter for faculty from the members list on the frontend or here
+    // const faculty = department.members.filter(m => m.role === 'FACULTY');
 
     res.json(department);
   } catch (error) {

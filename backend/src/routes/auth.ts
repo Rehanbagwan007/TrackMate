@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 
 const router = express.Router()
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret'
-const INSTITUTE_CODE = 'EX-001' as InstituteWhereUniqueInput["id"] 
+const INSTITUTE_CODE = 'EX-001'
 
 // login: { email, password }
 router.post('/login', async (req, res) => {
@@ -13,7 +13,7 @@ router.post('/login', async (req, res) => {
   if (!email || !password) return res.status(400).json({ error: 'email and password required' })
 
   // 1. Find the institute by its code
-  const institute = await prisma.institute.findUnique({ where: { code: INSTITUTE_CODE } })
+  const institute = await prisma.institute.findFirst({ where: { code: INSTITUTE_CODE } })
   if (!institute) return res.status(404).json({ error: 'institute not found' })
 
   // 2. Find the user by their email and institute
@@ -30,13 +30,12 @@ router.post('/login', async (req, res) => {
 
 // me
 import { authMiddleware } from '../middleware/auth'
-import { InstituteWhereUniqueInput } from '../generated/models'
 router.get('/me', authMiddleware, async (req, res) => {
   const user = (req as any).user
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id }, include: { department: true } })
+  const dbUser = await prisma.user.findUnique({ where: { id: user.id }, include: { hodDepartment: true } })
   if (!dbUser) return res.status(404).json({ error: 'not found' })
   // shape response for frontend/Zustand
-  res.json({ id: dbUser.id, name: dbUser.name, email: dbUser.email, role: dbUser.role, instituteId: dbUser.instituteId, department: dbUser.department })
+  res.json({ id: dbUser.id, name: dbUser.name, email: dbUser.email, role: dbUser.role, instituteId: dbUser.instituteId, department: (dbUser as any).hodDepartment })
 })
 
 export default router

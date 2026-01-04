@@ -16,7 +16,7 @@ router.post('/login', async (req, res) => {
     if (!email || !password)
         return res.status(400).json({ error: 'email and password required' });
     // 1. Find the institute by its code
-    const institute = await client_1.prisma.institute.findUnique({ where: { code: INSTITUTE_CODE } });
+    const institute = await client_1.prisma.institute.findFirst({ where: { code: INSTITUTE_CODE } });
     if (!institute)
         return res.status(404).json({ error: 'institute not found' });
     // 2. Find the user by their email and institute
@@ -33,10 +33,10 @@ router.post('/login', async (req, res) => {
 const auth_1 = require("../middleware/auth");
 router.get('/me', auth_1.authMiddleware, async (req, res) => {
     const user = req.user;
-    const dbUser = await client_1.prisma.user.findUnique({ where: { id: user.id }, include: { department: true } });
+    const dbUser = await client_1.prisma.user.findUnique({ where: { id: user.id }, include: { hodDepartment: true } });
     if (!dbUser)
         return res.status(404).json({ error: 'not found' });
     // shape response for frontend/Zustand
-    res.json({ id: dbUser.id, name: dbUser.name, email: dbUser.email, role: dbUser.role, instituteId: dbUser.instituteId, department: dbUser.department });
+    res.json({ id: dbUser.id, name: dbUser.name, email: dbUser.email, role: dbUser.role, instituteId: dbUser.instituteId, department: dbUser.hodDepartment });
 });
 exports.default = router;
