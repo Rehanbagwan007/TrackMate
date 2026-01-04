@@ -1,3 +1,4 @@
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -7,11 +8,14 @@
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated"
+  binaryTargets = ["native", "linux-musl"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DIRECT_URL")
+  provider  = "postgresql"
+  url = env("DIRECT_URL")
+ 
+ 
 }
 
 model Institute {
@@ -23,9 +27,9 @@ model Institute {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users       User[]
+  users      User[]
   departments Department[]
-  students    StudentAcademicProfile[]
+  students   StudentAcademicProfile[]
 
   @@map("Institute")
 }
@@ -38,8 +42,8 @@ model User {
 
   role String // INSTITUTE_ADMIN, DEPARTMENT_HOD, FACULTY, STUDENT
 
-  faceData          Bytes?
-  rfidUid           String?
+  faceData         Bytes?
+  rfidUid          String?
   biometricTemplate Bytes?
 
   instituteId String
@@ -90,14 +94,14 @@ model Department {
 }
 
 model StudentAcademicProfile {
-  id        String  @id @default(cuid())
+  id        String @id @default(cuid())
   year      Int
   semester  Int
   division  String
   rollNo    String?
-  studentId String  @unique
+  studentId String     @unique
   // This profile belongs to a student (User). This is one-to-one.
-  student   User    @relation(name: "StudentProfile", fields: [studentId], references: [id], onDelete: Cascade)
+  student   User       @relation(name: "StudentProfile", fields: [studentId], references: [id], onDelete: Cascade)
 
   instituteId String
   institute   Institute @relation(fields: [instituteId], references: [id], onDelete: Cascade)
