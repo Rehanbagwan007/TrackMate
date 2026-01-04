@@ -1,6 +1,6 @@
 FROM node:18
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/server
 
 COPY package*.json ./
 
@@ -12,4 +12,4 @@ RUN npx prisma generate
 
 EXPOSE 4000
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run" , "dev"]
