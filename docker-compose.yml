@@ -1,27 +1,16 @@
-version: '3.8'
 services:
   backend:
     build: ./backend
+    container_name: backend
     ports:
       - "4000:4000"
-    volumes:
-      - ./backend:/usr/src/server
-      - /usr/src/app/node_modules
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
-      - JWT_SECRET=${JWT_SECRET}
-      - DIRECT_URL=${DIRECT_URL}
-      - SUAPBASE_URL=${SUPABASE_URL}
-      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
-    depends_on:
-      - frontend
+    env_file:
+      - ./backend/.env
+    restart: always
 
   frontend:
     build: ./frontend
+    container_name: frontend
     ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/usr/src/app
-      - /usr/src/app/node_modules
-    depends_on:
-      - backend
+      - "80:80"
+    restart: always
