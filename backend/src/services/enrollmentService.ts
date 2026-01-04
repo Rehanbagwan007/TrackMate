@@ -16,15 +16,10 @@ export async function createDepartment(actor: Actor, data: { name: string; code?
   const existing = await prisma.department.findFirst({ where: { instituteId: actor.instituteId, name: data.name } })
   if (existing) return existing
 
-  // generate a short code if not provided
-  const code = data.code ?? (data.name.replace(/\s+/g, '_').slice(0, 20) + `_${Date.now().toString().slice(-4)}`)
-
   const dept = await prisma.department.create({
     data: {
       instituteId: actor.instituteId,
       name: data.name,
-      code,
-      description: data.description ?? null,
     },
   })
   return dept
@@ -65,8 +60,8 @@ export async function createFaculty(actor: Actor, data: { name: string; email: s
   if (actor.role !== 'HOD') throw new Error('Forbidden')
 
   // Ensure actor has a department
-  const hodUser = await prisma.user.findUnique({ where: { id: actor.id }, include: { hodDepartment: true } })
-  if (!hodUser?.hodDepartment?.id) throw new Error('HOD not assigned to a department')
+  const hodUser = await prisma.user.findUnique({ where: { id: actor.id }, include: { hodOf: true } })
+  if (!hodUser?.hodOf) throw new Error('HOD not assigned to a department')
 
   if (hodUser.instituteId !== actor.instituteId) throw new Error('Cross-institute access denied')
 
@@ -83,8 +78,8 @@ export async function createFaculty(actor: Actor, data: { name: string; email: s
   })
 
   if (data.subjectSpecialization) {
-    await prisma.facultySubject.create({ data: { subjectName: data.subjectSpecialization, facultyId: faculty.id, instituteId: actor.instituteId } })
-    // Note: FacultySubject model links faculty and subjectName. Department is not a direct field here in generated schema.
+    const deptId = hodUser.hodOf.id
+    await prisma.facultySubject.create({ data: { subject: data.subjectSpecialization, facultyId: faculty.id, departmentId: deptId } })
   }
 
   return faculty
@@ -109,12 +104,11 @@ export async function enrollStudent(actor: Actor, data: { name: string; rollNumb
       email: data.email,
       passwordHash,
       role: 'STUDENT',
-      // Prisma stores these as string|null — persist base64 strings, not Buffer
-      faceData: data.faceData ?? null,
+      // Prisma expects binary fields as Buffer (Bytes)
+      faceData: data.faceData ? Buffer.from(data.faceData, 'base64') : null,
       rfidUid: data.rfidUid ?? null,
-      biometricTemplate: data.biometricTemplate ?? null,
-      // store rollNumber on user record
-      rollNumber: data.rollNumber,
+      biometricTemplate: data.biometricTemplate ? Buffer.from(data.biometricTemplate, 'base64') : null,
+      // roll number belongs on the academic profile in this schema
     },
   })
 
@@ -126,7 +120,8 @@ export async function enrollStudent(actor: Actor, data: { name: string; rollNumb
       departmentId: dept.id,
       year: data.year,
       semester: data.semester,
-      division: data.division ?? null,
+      division: data.division ?? '',
+      rollNo: data.rollNumber ?? null,
     },
   })
 

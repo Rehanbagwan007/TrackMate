@@ -17,7 +17,7 @@ router.post('/login', async (req, res) => {
   if (!institute) return res.status(404).json({ error: 'institute not found' })
 
   // 2. Find the user by their email and institute
-  const user = await prisma.user.findUnique({ where: { instituteId_email: { email, instituteId: institute.id } } })
+  const user = await prisma.user.findFirst({ where: { email, instituteId: institute.id } })
   if (!user) return res.status(401).json({ error: 'invalid credentials' })
 
   const match = await bcrypt.compare(password, user.passwordHash)
@@ -32,10 +32,10 @@ router.post('/login', async (req, res) => {
 import { authMiddleware } from '../middleware/auth'
 router.get('/me', authMiddleware, async (req, res) => {
   const user = (req as any).user
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id }, include: { hodDepartment: true } })
+  const dbUser = await prisma.user.findUnique({ where: { id: user.id }, include: { hodOf: true } })
   if (!dbUser) return res.status(404).json({ error: 'not found' })
   // shape response for frontend/Zustand
-  res.json({ id: dbUser.id, name: dbUser.name, email: dbUser.email, role: dbUser.role, instituteId: dbUser.instituteId, department: (dbUser as any).hodDepartment })
+  res.json({ id: dbUser.id, name: dbUser.name, email: dbUser.email, role: dbUser.role, instituteId: dbUser.instituteId, department: (dbUser as any).hodOf && (dbUser as any).hodOf.length ? (dbUser as any).hodOf[0] : null })
 })
 
 export default router

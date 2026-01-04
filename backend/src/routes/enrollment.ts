@@ -79,7 +79,7 @@ router.get('/hods', authMiddleware, requireTenant, async (req, res) => {
 router.get('/faculty', authMiddleware, requireTenant, async (req, res) => {
   const user = (req as any).user
   try {
-    const faculty = await prisma.user.findMany({ where: { instituteId: user.instituteId, role: 'FACULTY' }, include: { facultySubjects: true } })
+    const faculty = await prisma.user.findMany({ where: { instituteId: user.instituteId, role: 'FACULTY' }, include: { subjectsTaught: true } })
     res.json(faculty)
   } catch (err: any) {
     res.status(500).json({ error: err.message ?? String(err) })
@@ -90,7 +90,7 @@ router.get('/faculty', authMiddleware, requireTenant, async (req, res) => {
 router.get('/students', authMiddleware, requireTenant, async (req, res) => {
   const user = (req as any).user
   try {
-    const students = await prisma.user.findMany({ where: { instituteId: user.instituteId, role: 'STUDENT' }, include: { studentProfile: true } })
+    const students = await prisma.user.findMany({ where: { instituteId: user.instituteId, role: 'STUDENT' }, include: { academicProfile: true } })
     res.json(students)
   } catch (err: any) {
     res.status(500).json({ error: err.message ?? String(err) })

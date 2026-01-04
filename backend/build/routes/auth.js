@@ -20,7 +20,7 @@ router.post('/login', async (req, res) => {
     if (!institute)
         return res.status(404).json({ error: 'institute not found' });
     // 2. Find the user by their email and institute
-    const user = await client_1.prisma.user.findUnique({ where: { instituteId_email: { email, instituteId: institute.id } } });
+    const user = await client_1.prisma.user.findFirst({ where: { email, instituteId: institute.id } });
     if (!user)
         return res.status(401).json({ error: 'invalid credentials' });
     const match = await bcrypt_1.default.compare(password, user.passwordHash);
@@ -33,10 +33,10 @@ router.post('/login', async (req, res) => {
 const auth_1 = require("../middleware/auth");
 router.get('/me', auth_1.authMiddleware, async (req, res) => {
     const user = req.user;
-    const dbUser = await client_1.prisma.user.findUnique({ where: { id: user.id }, include: { hodDepartment: true } });
+    const dbUser = await client_1.prisma.user.findUnique({ where: { id: user.id }, include: { hodOf: true } });
     if (!dbUser)
         return res.status(404).json({ error: 'not found' });
     // shape response for frontend/Zustand
-    res.json({ id: dbUser.id, name: dbUser.name, email: dbUser.email, role: dbUser.role, instituteId: dbUser.instituteId, department: dbUser.hodDepartment });
+    res.json({ id: dbUser.id, name: dbUser.name, email: dbUser.email, role: dbUser.role, instituteId: dbUser.instituteId, department: dbUser.hodOf && dbUser.hodOf.length ? dbUser.hodOf[0] : null });
 });
 exports.default = router;

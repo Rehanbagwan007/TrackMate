@@ -61,3 +61,6 @@ Security & tenant-isolation checklist
 - Prisma queries in service layer MUST include `instituteId` filtering.
 - Never accept `instituteId` from the frontend.
 - Use composite unique constraints to prevent cross-tenant collisions (e.g., `@@unique([instituteId, email])`).
+
+
+
