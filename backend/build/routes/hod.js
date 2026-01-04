@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const auth_1 = require("../middleware/auth");
 const client_1 = require("../db/client");
-//onst prisma = new PrismaClient();
 const router = (0, express_1.Router)();
 router.get('/dashboard', auth_1.authMiddleware, async (req, res) => {
     const user = req.user;
@@ -14,13 +13,17 @@ router.get('/dashboard', auth_1.authMiddleware, async (req, res) => {
         const department = await client_1.prisma.department.findUnique({
             where: { hodId: user.id },
             include: {
-                faculty: true,
-                students: true,
+                // Prisma `Department` include keys: institute, hod, studentProfiles, _count
+                hod: true,
+                studentProfiles: true,
+                _count: true,
             },
         });
         if (!department) {
             return res.status(404).json({ message: 'Department not found for this HOD' });
         }
+        // You can filter for faculty from the members list on the frontend or here
+        // const faculty = department.members.filter(m => m.role === 'FACULTY');
         res.json(department);
     }
     catch (error) {

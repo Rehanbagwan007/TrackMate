@@ -19,8 +19,10 @@ router.get('/dashboard', authMiddleware, async (req: AuthRequest, res) => {
     const department = await prisma.department.findUnique({
       where: { hodId: user.id },
       include: {
-        members: true, // Correct: Include all department members
-        students: true,
+        // Prisma `Department` include keys: institute, hod, studentProfiles, _count
+        hod: true,
+        studentProfiles: true,
+        _count: true,
       },
     });
 

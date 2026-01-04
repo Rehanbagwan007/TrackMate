@@ -7,21 +7,24 @@ type Actor = { id: string; instituteId: string; role: string }
 /**
  * Create a department — only INSTITUTE_ADMIN allowed
  */
-export async function createDepartment(actor: Actor, data: { name: string; code: string; description?: string }) {
+export async function createDepartment(actor: Actor, data: { name: string; code?: string; description?: string }) {
   if (actor.role !== 'INSTITUTE_ADMIN') throw new Error('Forbidden')
 
   // Ensure scoping by instituteId
-  const dept = await prisma.department.upsert({
-    where: {
-      name_instituteId: {
-        name: data.name,
-        instituteId: actor.instituteId,
-      },
-    },
-    update: {},
-    create: {
+  // Prisma generated client doesn't have a `name_instituteId` unique input.
+  // We'll find by name scoped to institute and create if missing (code is required by model).
+  const existing = await prisma.department.findFirst({ where: { instituteId: actor.instituteId, name: data.name } })
+  if (existing) return existing
+
+  // generate a short code if not provided
+  const code = data.code ?? (data.name.replace(/\s+/g, '_').slice(0, 20) + `_${Date.now().toString().slice(-4)}`)
+
+  const dept = await prisma.department.create({
+    data: {
       instituteId: actor.instituteId,
       name: data.name,
+      code,
+      description: data.description ?? null,
     },
   })
   return dept
@@ -46,11 +49,10 @@ export async function createHod(actor: Actor, data: { name: string; email: strin
       email: data.email,
       passwordHash,
       role: 'HOD',
-      departmentId: dept.id,
     },
   })
 
-  // set department.hodId
+  // set department.hodId to link HOD
   await prisma.department.update({ where: { id: dept.id }, data: { hodId: hod.id } })
 
   return hod
@@ -63,8 +65,8 @@ export async function createFaculty(actor: Actor, data: { name: string; email: s
   if (actor.role !== 'HOD') throw new Error('Forbidden')
 
   // Ensure actor has a department
-  const hodUser = await prisma.user.findUnique({ where: { id: actor.id }, include: { department: true } })
-  if (!hodUser?.departmentId) throw new Error('HOD not assigned to a department')
+  const hodUser = await prisma.user.findUnique({ where: { id: actor.id }, include: { hodDepartment: true } })
+  if (!hodUser?.hodDepartment?.id) throw new Error('HOD not assigned to a department')
 
   if (hodUser.instituteId !== actor.instituteId) throw new Error('Cross-institute access denied')
 
@@ -77,12 +79,12 @@ export async function createFaculty(actor: Actor, data: { name: string; email: s
       email: data.email,
       passwordHash,
       role: 'FACULTY',
-      departmentId: hodUser.departmentId,
     },
   })
 
   if (data.subjectSpecialization) {
-    await prisma.facultySubject.create({ data: { subject: data.subjectSpecialization, facultyId: faculty.id, departmentId: hodUser.departmentId } })
+    await prisma.facultySubject.create({ data: { subjectName: data.subjectSpecialization, facultyId: faculty.id, instituteId: actor.instituteId } })
+    // Note: FacultySubject model links faculty and subjectName. Department is not a direct field here in generated schema.
   }
 
   return faculty
@@ -107,21 +109,24 @@ export async function enrollStudent(actor: Actor, data: { name: string; rollNumb
       email: data.email,
       passwordHash,
       role: 'STUDENT',
-      faceData: data.faceData ? Buffer.from(data.faceData, 'base64') : null ,
+      // Prisma stores these as string|null — persist base64 strings, not Buffer
+      faceData: data.faceData ?? null,
       rfidUid: data.rfidUid ?? null,
-      biometricTemplate: data.biometricTemplate ? Buffer.from(data.biometricTemplate, 'base64') : null,
+      biometricTemplate: data.biometricTemplate ?? null,
+      // store rollNumber on user record
+      rollNumber: data.rollNumber,
     },
   })
 
   await prisma.studentAcademicProfile.create({
     data: {
+      // use unchecked fields (scalars) for creation
       instituteId: actor.instituteId,
       studentId: student.id,
       departmentId: dept.id,
       year: data.year,
       semester: data.semester,
-      division: data.division,
-      rollNo: data.rollNumber,
+      division: data.division ?? null,
     },
   })
 
